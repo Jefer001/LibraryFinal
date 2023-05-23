@@ -1,0 +1,22 @@
+﻿@model Library.DAL.Entities.LiteraryGenre
+
+@{
+    ViewData["Title"] = "Delete";
+}
+
+<h1>Eliminar</h1>
+
+<h3>¿Estás seguro que deseas eliminar este género litarario?</h3>
+<div>
+    <h4>LiteraryGenre</h4>
+    <hr />
+        
+        <partial name="../Shared/PartialViews/_LiteraryDeleteDetails" />
+    
+    <form asp-action="Delete">
+        <input type="hidden" asp-for="Id" />
+
+        <input type="submit" value="Eliminar" class="btn btn-outline-danger" />
+        <a asp-action="Index" class="btn btn-outline-success">Regresar</a>
+    </form>
+</div>

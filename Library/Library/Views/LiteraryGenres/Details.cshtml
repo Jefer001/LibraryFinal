@@ -1,0 +1,17 @@
+﻿@model Library.DAL.Entities.LiteraryGenre
+
+@{
+    ViewData["Title"] = "Details";
+}
+
+<h1>Detalles</h1>
+
+<div>
+    <h4>Género literario</h4>
+    <hr />
+    <partial name="../Shared/PartialViews/_LiteraryDeleteDetails" />
+</div>
+<div>
+    <a asp-action="Edit" asp-route-id="@Model?.Id" class="btn btn-outline-warning">Editar</a>
+    <a asp-action="Index" class="btn btn-outline-success">Regresar</a>
+</div>
