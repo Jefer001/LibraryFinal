@@ -15,15 +15,25 @@ namespace Library.DAL.Entities
         [Required(ErrorMessage = "El campo {0} es obligatorio.")]
         public string Author { get; set; }
 
-        [DataType(DataType.MultilineText)]
-        [Display(Name = "Descripción")]
-        [MaxLength(500, ErrorMessage = "El campo {0} debe tener máximo {1} caracteres.")]
-        public string? Description { get; set; }
-
         [DisplayFormat(DataFormatString = "{0}")]
         [Display(Name = "Inventario")]
         [Required(ErrorMessage = "El campo {0} es obligatorio.")]
         public int Stock { get; set; }
+
+        public ICollection<BookGenre> BookGenres { get; set; }
+
+        [Display(Name = "Géneros")]
+        public int NumberGenera => BookGenres == null ? 0 : BookGenres.Count;
+
+        public ICollection<BookImage> BookImages { get; set; }
+
+        [Display(Name = "Número Fotos")]
+        public int ImagesNumber => BookImages == null ? 0 : BookImages.Count;
+
+        [Display(Name = "Foto")]
+        public string ImageFullPath => BookImages == null || BookImages.Count == 0
+            ? $"https://localhost:7120/images/noimage.png"
+            : BookImages.FirstOrDefault().ImageFullPath;
         #endregion
     }
 }
