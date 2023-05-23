@@ -87,6 +87,7 @@ namespace Library.Controllers
             {
                 try
                 {
+                    book.ModifiedDate = DateTime.Now;
                     _context.Update(book);
                     await _context.SaveChangesAsync();
                     return RedirectToAction(nameof(Index));
