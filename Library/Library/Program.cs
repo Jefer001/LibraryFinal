@@ -17,6 +17,9 @@ builder.Services.AddTransient<SeederDB>();
 //Builder para llamar la interfaz IAzureStorageHelper.cs
 builder.Services.AddScoped<IAzureBlobHelper, AzureBlobHelper>();
 
+//Builder para llamar la interfaz IDroDownListhelper.cs
+builder.Services.AddScoped<IDropDownListHelper, DropDownListHelper>();
+
 var app = builder.Build();
 
 SeederData();

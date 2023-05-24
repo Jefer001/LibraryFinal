@@ -9,7 +9,7 @@
 <h1>Libro</h1>
 
 <p>
-    <a asp-action="Create" class="btn btn-outline-primary">Crear nueva categoría</a>
+    <a asp-action="Create" class="btn btn-outline-primary">Nuevo</a>
 </p>
 
 <div class="row">
@@ -29,10 +29,13 @@
                                 @Html.DisplayNameFor(model => model.Stock)
                             </th>
                             <th>
-                                @Html.DisplayNameFor(model => model.CreatedDate)
+                                @Html.DisplayNameFor(model => model.NumberGenera)
                             </th>
                             <th>
-                                @Html.DisplayNameFor(model => model.ModifiedDate)
+                                @Html.DisplayNameFor(model => model.ImagesNumber)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.ImageFullPath)
                             </th>
                             <th></th>
                         </tr>
@@ -51,10 +54,13 @@
                                     @Html.DisplayFor(modelItem => book.Stock)
                                 </td>
                                 <td>
-                                    @Html.DisplayFor(modelItem => book.CreatedDate)
+                                    @Html.DisplayFor(modelItem => book.NumberGenera)
                                 </td>
                                 <td>
-                                    @Html.DisplayFor(modelItem => book.ModifiedDate)
+                                    @Html.DisplayFor(modelItem => book.ImagesNumber)
+                                </td>
+                                <td>
+                                    <img src="@book.ImageFullPath" style="width:100px;" />
                                 </td>
                                 <td>
                                     <a asp-action="Edit" asp-route-id="@book.Id" class="btn btn-outline-warning">Editar</a>

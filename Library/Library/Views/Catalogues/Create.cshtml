@@ -1,4 +1,4 @@
-﻿@model Library.DAL.Entities.LiteraryGender
+﻿@model Library.DAL.Entities.Catalogue
 
 @{
     ViewData["Title"] = "Create";
@@ -13,7 +13,7 @@
         <form asp-action="Create">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
 
-            <partial name="../Shared/PartialViews/_LiteraryCreateEdit" />
+            <partial name="../Shared/PartialViews/_CatalogueCreateEdit" />
 
             <div class="form-group">
                 <input type="submit" value="Crear" class="btn btn-outline-primary" />

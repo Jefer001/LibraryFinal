@@ -13,8 +13,8 @@ namespace Library.DAL
 
         #region Properties
         public DbSet<Book> Books { get; set; }
-        public DbSet<LiteraryGender> LiteraryGenders { get; set; }
-        public DbSet<BookGender> BookGenders { get; set; }
+        public DbSet<Catalogue> Catalogues { get; set; }
+        public DbSet<BookCatalogue> BookCatalogues { get; set; }
         public DbSet<BookImage> BookImages { get; set; }
         #endregion
 
@@ -23,7 +23,7 @@ namespace Library.DAL
         {
             base.OnModelCreating(modelBuilder);
             modelBuilder.Entity<Book>().HasIndex("Name", "Author").IsUnique();
-            modelBuilder.Entity<LiteraryGender>().HasIndex(l => l.Name).IsUnique();
+            modelBuilder.Entity<Catalogue>().HasIndex(l => l.Name).IsUnique();
         }
         #endregion
     }

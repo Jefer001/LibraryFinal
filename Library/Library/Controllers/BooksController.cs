@@ -1,5 +1,6 @@
 ﻿using Library.DAL;
 using Library.DAL.Entities;
+using Library.Helpers;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -9,12 +10,16 @@ namespace Library.Controllers
     {
         #region Constants
         private readonly DataBaseContext _context;
+        private readonly IAzureBlobHelper _azureBlobHelper;
+        private readonly IDropDownListHelper _dropDownListHelper;
         #endregion
 
         #region Builder
-        public BooksController(DataBaseContext context)
+        public BooksController(DataBaseContext context, IAzureBlobHelper azureBlobHelper, IDropDownListHelper dropDownListHelper)
         {
             _context = context;
+            _azureBlobHelper = azureBlobHelper;
+            _dropDownListHelper = dropDownListHelper;
         }
         #endregion
 
@@ -23,9 +28,12 @@ namespace Library.Controllers
         [HttpGet]
         public async Task<IActionResult> Index()
         {
-            return _context.Books != null ?
-                        View(await _context.Books.ToListAsync()) :
-                        Problem("Entity set 'DataBaseContext.Books'  is null.");
+            return View(await _context.Books
+                .Include(b => b.BookImages)
+                .Include(b => b.BookCatalogues)
+                .ThenInclude(bc => bc.Catalogue)
+                .ToListAsync());
+                        
         }
 
         // GET: Books/Create

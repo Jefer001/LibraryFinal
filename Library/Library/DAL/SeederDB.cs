@@ -39,12 +39,12 @@ namespace Library.DAL
         #region Private methods
         private async Task PopulateliteraryGendersAsync()
         {
-            if (!_context.LiteraryGenders.Any())
+            if (!_context.Catalogues.Any())
             {
-                _context.LiteraryGenders.Add(new LiteraryGender { Name = "Épico", Description = "En el género épico, el diálogo y la descripción forman parte de la narrativa, de eventos reales o ficticios.", CreatedDate = DateTime.Now });
-                _context.LiteraryGenders.Add(new LiteraryGender { Name = "Lírico", Description = "En el género épico, el diálogo y la descripción forman parte de la narrativa, de eventos reales o ficticios.", CreatedDate = DateTime.Now });
-                _context.LiteraryGenders.Add(new LiteraryGender { Name = "Dramático", Description = "Es un tipo de texto donde el autor expresa sus sentimientos. Se llama así, porque en la Antigua Grecia los cantaban acompañándose de un instrumento llamado Lira.", CreatedDate = DateTime.Now });
-                _context.LiteraryGenders.Add(new LiteraryGender { Name = "Didáctico", Description = "El género literario dramático, se desarrolla en episodios, con subtramas, donde el diálogo es fundamental.", CreatedDate = DateTime.Now });
+                _context.Catalogues.Add(new Catalogue { Name = "Narrativo", Description = "Cuento, epopeya, novela, poema épico, cantares de gesta, fábula, leyendas, romances líricos, epístola.", CreatedDate = DateTime.Now });
+                _context.Catalogues.Add(new Catalogue { Name = "Lírico", Description = "Poema, oda, sonetos, elegía, égloga sátira, himnos o canciones.", CreatedDate = DateTime.Now });
+                _context.Catalogues.Add(new Catalogue { Name = "Dramático", Description = "Teatro, drama, comedia, amor, ópera, melodrama, farsa, tragedia.", CreatedDate = DateTime.Now });
+                _context.Catalogues.Add(new Catalogue { Name = "Didáctico", Description = "Su principal intención es enseñar, centrándose en lo que puede dejar lo narrado.", CreatedDate = DateTime.Now });
             }
         }
 
@@ -53,7 +53,7 @@ namespace Library.DAL
         //    if (!_context.Books.Any())
         //    {
         //        await AddBooktAsync("Un pájaro de aire", "María Emilia López", 27, new List<string>() { "Didáctico" }, new List<string>() { "pajaro.png" });
-        //        await AddBooktAsync("Cien años de soledad", "Gabriel García Márquez", 300, new List<string>() { "Narración" }, new List<string>() { "cien.png", "garcia.png" });
+        //        await AddBooktAsync("Cien años de soledad", "Gabriel García Márquez", 300, new List<string>() { "Narrativo" }, new List<string>() { "cien.png", "garcia.png" });
         //    }
         //}
 

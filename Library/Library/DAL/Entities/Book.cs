@@ -20,10 +20,10 @@ namespace Library.DAL.Entities
         [Required(ErrorMessage = "El campo {0} es obligatorio.")]
         public int Stock { get; set; }
 
-        public ICollection<BookGender> BookGenders { get; set; }
+        public ICollection<BookCatalogue> BookCatalogues { get; set; }
 
-        [Display(Name = "Géneros")]
-        public int NumberGenera => BookGenders == null ? 0 : BookGenders.Count;
+        [Display(Name = "Cálogo")]
+        public int NumberGenera => BookCatalogues == null ? 0 : BookCatalogues.Count;
 
         public ICollection<BookImage> BookImages { get; set; }
 

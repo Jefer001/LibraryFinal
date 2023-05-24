@@ -1,4 +1,4 @@
-﻿@model Library.DAL.Entities.LiteraryGender
+﻿@model Library.DAL.Entities.Catalogue
 
 @{
     ViewData["Title"] = "Delete";
@@ -10,8 +10,8 @@
 <div>
     <h4>LiteraryGenre</h4>
     <hr />
-        
-        <partial name="../Shared/PartialViews/_LiteraryDeleteDetails" />
+
+    <partial name="../Shared/PartialViews/_CatalogueDeleteDetails" />
     
     <form asp-action="Delete">
         <input type="hidden" asp-for="Id" />

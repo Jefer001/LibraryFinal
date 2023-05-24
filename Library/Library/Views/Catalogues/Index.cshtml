@@ -1,4 +1,4 @@
-﻿@model IEnumerable<Library.DAL.Entities.LiteraryGender>
+﻿@model IEnumerable<Library.DAL.Entities.Catalogue>
 
 @{
     ViewData["Title"] = "Index";
@@ -6,17 +6,17 @@
 
 <link rel="stylesheet" href="https://cdn.datatables.net/1.13.3/css/jquery.dataTables.min.css" />
 
-<h1>Género literario</h1>
+<h1>Catálago</h1>
 
 <p>
-    <a asp-action="Create" class="btn btn-outline-primary">Nuevo género</a>
+    <a asp-action="Create" class="btn btn-outline-primary">Nuevo</a>
 </p>
 
 <div class="row">
     <div class="col-md-12">
         <div class="panel panel-default">
             <div class="panel-body">
-                <table class="table table-hover table-responsive table-striped" id="LiteraryTable">
+                <table class="table table-hover table-responsive table-striped" id="CatalogueTable">
                     <thead>
                         <tr>
                             <th>
@@ -72,7 +72,7 @@
 
     <script type="text/javascript">
         $(document).ready(function () {
-            $('#LiteraryTable').DataTable({
+            $('#CatalogueTable').DataTable({
                 "language": {
                     "url": "//cdn.datatables.net/plug-ins/9dcbecd42ad/i18n/Spanish.json"
                 },
