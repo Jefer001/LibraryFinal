@@ -1,18 +1,36 @@
-﻿@model Library.DAL.Entities.Book
+﻿@model Library.Models.AddBookViewmodel
 
-<div asp-validation-summary="ModelOnly" class="text-danger"></div>
-<div class="input-group mb-3">
-    <label asp-for="Name" class="input-group-text"></label>
-    <input asp-for="Name" class="form-control" />
-    <span asp-validation-for="Name" class="text-danger"></span>
-</div>
-<div class="input-group mb-3">
-    <label asp-for="Author" class="input-group-text"></label>
-    <input asp-for="Author" class="form-control" />
-    <span asp-validation-for="Author" class="text-danger"></span>
-</div>
-<div class="input-group mb-3">
-    <label asp-for="Stock" class="input-group-text"></label>
-    <input asp-for="Stock" class="form-control" />
-    <span asp-validation-for="Stock" class="text-danger"></span>
+<div class="row">
+    <div class="col-md-6">
+        <div class="input-group mb-3">
+            <label asp-for="Name" class="input-group-text"></label>
+            <input asp-for="Name" class="form-control" />
+            <span asp-validation-for="Name" class="text-danger"></span>
+        </div>
+        <div class="input-group mb-3">
+            <label asp-for="Author" class="input-group-text"></label>
+            <input asp-for="Author" class="form-control" />
+            <span asp-validation-for="Author" class="text-danger"></span>
+        </div>
+
+        <div class="input-group mb-3">
+            <label asp-for="CatalogueId" class="input-group-text"></label>
+            <select asp-for="CatalogueId" asp-items="Model.Catalogues" class="form-control"></select>
+            <span asp-validation-for="CatalogueId" class="text-danger"></span>
+        </div>
+    </div>
+
+    <div class="col-md-6">
+        <div class="input-group mb-3">
+            <label asp-for="Stock" class="input-group-text"></label>
+            <input asp-for="Stock" class="form-control" />
+            <span asp-validation-for="Stock" class="text-danger"></span>
+        </div>
+
+        <div class="input-group mb-3">
+            <label asp-for="ImageFile" class="input-group-text"></label>
+            <input asp-for="ImageFile" class="form-control" type="file" />
+            <span asp-validation-for="ImageFile" class="text-danger"></span>
+        </div>
+    </div>
 </div>

@@ -1,6 +1,7 @@
 ﻿using Library.DAL;
 using Library.DAL.Entities;
 using Library.Helpers;
+using Library.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -37,25 +38,58 @@ namespace Library.Controllers
         }
 
         // GET: Books/Create
-        public IActionResult Create()
+        public async Task<IActionResult> Create()
         {
-            return View();
+            AddBookViewmodel addBookViewmodel = new()
+            {
+                Catalogues = await _dropDownListHelper.GetDDLCataloguesAsync(),
+            };
+
+            return View(addBookViewmodel);
         }
 
         // POST: Books/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(Book book)
+        public async Task<IActionResult> Create(AddBookViewmodel addBookViewmodel)
         {
             if (ModelState.IsValid)
             {
                 try
                 {
-                    book.CreatedDate = DateTime.Now;
+                    Guid imageId = Guid.Empty;
+                    if (addBookViewmodel.ImageFile != null)
+                        imageId = await _azureBlobHelper.UploadAzureBlobAsync(addBookViewmodel.ImageFile, "products");
+
+                    Book book = new()
+                    {
+                        CreatedDate = DateTime.Now,
+                        Name = addBookViewmodel.Name,
+                        Author = addBookViewmodel.Author,
+                        Stock = addBookViewmodel.Stock,
+                        BookCatalogues = new List<BookCatalogue>()
+                    {
+                        new BookCatalogue
+                        {
+                            Catalogue = await _context.Catalogues.FindAsync(addBookViewmodel.CatalogueId)
+                        }
+                    }
+                    };
+
+                    if (imageId != Guid.Empty)
+                    {
+                        book.BookImages = new List<BookImage>()
+                        {
+                            new BookImage {
+                                ImageId = imageId,
+                                CreatedDate = DateTime.Now
+                            }
+                        };
+                    }
+
                     _context.Add(book);
                     await _context.SaveChangesAsync();
                     return RedirectToAction(nameof(Index));
-
                 }
                 catch (DbUpdateException dbUpdateException)
                 {
@@ -69,7 +103,8 @@ namespace Library.Controllers
                     ModelState.AddModelError(string.Empty, ex.Message);
                 }
             }
-            return View(book);
+            addBookViewmodel.Catalogues = await _dropDownListHelper.GetDDLCataloguesAsync();
+            return View(addBookViewmodel);
         }
 
         // GET: Books/Edit/5
