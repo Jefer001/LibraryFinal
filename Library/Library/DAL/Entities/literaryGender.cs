@@ -2,7 +2,7 @@
 
 namespace Library.DAL.Entities
 {
-    public class LiteraryGenre : Entity
+    public class LiteraryGender : Entity
     {
         #region Properties
         [Display(Name = "Género literario")]
@@ -15,7 +15,7 @@ namespace Library.DAL.Entities
         [MaxLength(500, ErrorMessage = "El campo {0} debe tener máximo {1} caracteres.")]
         public string? Description { get; set; }
 
-        public ICollection<BookGenre> BookGenre { get; set; }
+        public ICollection<BookGender> BookGenre { get; set; }
         #endregion
     }
 }

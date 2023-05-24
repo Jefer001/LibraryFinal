@@ -20,10 +20,10 @@ namespace Library.DAL.Entities
         [Required(ErrorMessage = "El campo {0} es obligatorio.")]
         public int Stock { get; set; }
 
-        public ICollection<BookGenre> BookGenres { get; set; }
+        public ICollection<BookGender> BookGenders { get; set; }
 
         [Display(Name = "Géneros")]
-        public int NumberGenera => BookGenres == null ? 0 : BookGenres.Count;
+        public int NumberGenera => BookGenders == null ? 0 : BookGenders.Count;
 
         public ICollection<BookImage> BookImages { get; set; }
 
@@ -32,7 +32,7 @@ namespace Library.DAL.Entities
 
         [Display(Name = "Foto")]
         public string ImageFullPath => BookImages == null || BookImages.Count == 0
-            ? $"https://localhost:7120/images/noimage.png"
+            ? $"https://localhost:7298/images/noimage.png"
             : BookImages.FirstOrDefault().ImageFullPath;
         #endregion
     }

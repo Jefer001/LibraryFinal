@@ -1,11 +1,11 @@
 ﻿namespace Library.DAL.Entities
 {
-    public class BookGenre : Entity
+    public class BookGender : Entity
     {
         #region Properties
         public Book Book { get; set; }
 
-        public LiteraryGenre Literary { get; set; }
+        public LiteraryGender Literary { get; set; }
         #endregion
     }
 }

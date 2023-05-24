@@ -5,26 +5,26 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Library.Controllers
 {
-    public class LiteraryGenresController : Controller
+    public class literaryGendersController : Controller
     {
         #region Constants
         private readonly DataBaseContext _context;
         #endregion
 
         #region Builder
-        public LiteraryGenresController(DataBaseContext context)
+        public literaryGendersController(DataBaseContext context)
         {
             _context = context;
         }
         #endregion
 
-        #region LiteraryGenre actions
+        #region LiteraryGender actions
         // GET: LiteraryGenres
         [HttpGet]
         public async Task<IActionResult> Index()
         {
-            return _context.literaryGenres != null ?
-                        View(await _context.literaryGenres.ToListAsync()) :
+            return _context.LiteraryGenders != null ?
+                        View(await _context.LiteraryGenders.ToListAsync()) :
                         Problem("Entity set 'DataBaseContext.literaryGenres'  is null.");
         }
 
@@ -37,7 +37,7 @@ namespace Library.Controllers
         // POST: LiteraryGenres/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(LiteraryGenre literaryGenre)
+        public async Task<IActionResult> Create(LiteraryGender literaryGenre)
         {
             if (ModelState.IsValid)
             {
@@ -67,9 +67,9 @@ namespace Library.Controllers
         // GET: LiteraryGenres/Edit/5
         public async Task<IActionResult> Edit(Guid? id)
         {
-            if (id == null || _context.literaryGenres == null) return NotFound();
+            if (id == null || _context.LiteraryGenders == null) return NotFound();
 
-            var literary = await _context.literaryGenres.FindAsync(id);
+            var literary = await _context.LiteraryGenders.FindAsync(id);
 
             if (literary == null) return NotFound();
 
@@ -79,7 +79,7 @@ namespace Library.Controllers
         // POST: LiteraryGenres/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(Guid id, LiteraryGenre literaryGenre)
+        public async Task<IActionResult> Edit(Guid id, LiteraryGender literaryGenre)
         {
             if (id != literaryGenre.Id) return NotFound();
 
@@ -110,9 +110,9 @@ namespace Library.Controllers
         // GET: LiteraryGenres/Details/5
         public async Task<IActionResult> Details(Guid? id)
         {
-            if (id == null || _context.literaryGenres == null) return NotFound();
+            if (id == null || _context.LiteraryGenders == null) return NotFound();
 
-            var literary = await _context.literaryGenres.FirstOrDefaultAsync(l => l.Id.Equals(id));
+            var literary = await _context.LiteraryGenders.FirstOrDefaultAsync(l => l.Id.Equals(id));
 
             if (literary == null) return NotFound();
 
@@ -122,9 +122,9 @@ namespace Library.Controllers
         // GET: LiteraryGenres/Delete/5
         public async Task<IActionResult> Delete(Guid? id)
         {
-            if (id == null || _context.literaryGenres == null) return NotFound();
+            if (id == null || _context.LiteraryGenders == null) return NotFound();
 
-            var literary = await _context.literaryGenres.FirstOrDefaultAsync(l => l.Id.Equals(id));
+            var literary = await _context.LiteraryGenders.FirstOrDefaultAsync(l => l.Id.Equals(id));
 
             if (literary == null) return NotFound();
 
@@ -136,11 +136,11 @@ namespace Library.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(Guid id)
         {
-            if (_context.literaryGenres == null) return Problem("Entity set 'DataBaseContext.literaryGenres'  is null.");
+            if (_context.LiteraryGenders == null) return Problem("Entity set 'DataBaseContext.literaryGenres'  is null.");
 
-            var literary = await _context.literaryGenres.FindAsync(id);
+            var literary = await _context.LiteraryGenders.FindAsync(id);
 
-            if (literary != null) _context.literaryGenres.Remove(literary);
+            if (literary != null) _context.LiteraryGenders.Remove(literary);
 
             await _context.SaveChangesAsync();
 
@@ -149,7 +149,7 @@ namespace Library.Controllers
 
         private bool LiteraryGenreExists(Guid id)
         {
-            return (_context.literaryGenres?.Any(l => l.Id.Equals(id))).GetValueOrDefault();
+            return (_context.LiteraryGenders?.Any(l => l.Id.Equals(id))).GetValueOrDefault();
         }
         #endregion
     }
