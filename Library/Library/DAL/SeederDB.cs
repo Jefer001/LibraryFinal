@@ -8,16 +8,16 @@ namespace Library.DAL
     {
         #region Constants
         private readonly DataBaseContext _context;
-        //private readonly IUserHelpers _userHelpers;
         private readonly IAzureBlobHelper _azureBlobHelper;
+        //private readonly IUserHelpers _userHelpers;
         #endregion
 
         #region Builder
         public SeederDB(DataBaseContext context, IAzureBlobHelper azureBlobHelper)
         {
             _context = context;
+            _azureBlobHelper = azureBlobHelper;
             //_userHelpers = userHelpers;
-            ////_azureBlobHelper = azureBlobHelper;
         }
         #endregion
 
@@ -27,7 +27,7 @@ namespace Library.DAL
             await _context.Database.EnsureCreatedAsync();
 
             await PopulateliteraryGendersAsync();
-            //await PopulateBookAsync();
+            await PopulateBookAsync();
             //await PopulateRolesAsync();
             //await PopulateUserAsync("Steve", "Jobs", "steve_jobs_admin@yopmail.com", "3002323232", "Street Apple", "102030", "admin_use.png", UserType.Admin);
             //await PopulateUserAsync("Bill", "Gates", "bill_gates_user@yopmail.com", "4005656656", "Street Microsoft", "405060", "user.png", UserType.User);
@@ -48,39 +48,39 @@ namespace Library.DAL
             }
         }
 
-        //private async Task PopulateBookAsync()
-        //{
-        //    if (!_context.Books.Any())
-        //    {
-        //        await AddBooktAsync("Un pájaro de aire", "María Emilia López", 27, new List<string>() { "Didáctico" }, new List<string>() { "pajaro.png" });
-        //        await AddBooktAsync("Cien años de soledad", "Gabriel García Márquez", 300, new List<string>() { "Narrativo" }, new List<string>() { "cien.png", "garcia.png" });
-        //    }
-        //}
+        private async Task PopulateBookAsync()
+        {
+            if (!_context.Books.Any())
+            {
+                await AddBooktAsync("Un pájaro de aire", "María Emilia López", 27, new List<string>() { "Didáctico" }, new List<string>() { "pajaro.png" });
+                await AddBooktAsync("Cien años de soledad", "Gabriel García Márquez", 300, new List<string>() { "Narrativo" }, new List<string>() { "cien.png", "garcia.png" });
+            }
+        }
 
-        //private async Task AddBooktAsync(string name, string author, int stock, List<string> literary, List<string> images)
-        //{
-        //    Book book = new()
-        //    {
-        //        Name = name,
-        //        Author = author,
-        //        Stock = stock,
-        //        BookGenders = new List<BookGender>(),
-        //        BookImages = new List<BookImage>()
-        //    };
+        private async Task AddBooktAsync(string name, string author, int stock, List<string> catalogues, List<string> images)
+        {
+            Book book = new()
+            {
+                Name = name,
+                Author = author,
+                Stock = stock,
+                BookCatalogues = new List<BookCatalogue>(),
+                BookImages = new List<BookImage>()
+            };
 
-        //    foreach (string? literaryGender in literary)
-        //    {
-        //        book.BookGenders.Add(new BookGender { Literary = await _context.LiteraryGenders.FirstOrDefaultAsync(lg => lg.Name.Equals(literaryGender)) });
-        //    }
+            foreach (string? catalogue in catalogues)
+            {
+                book.BookCatalogues.Add(new BookCatalogue { Catalogue = await _context.Catalogues.FirstOrDefaultAsync(c => c.Name.Equals(catalogues)) });
+            }
 
-        //    foreach (string? image in images)
-        //    {
-        //        Guid imageId = await _azureBlobHelper.UploadAzureBlobAsync($"{Environment.CurrentDirectory}\\wwwroot\\images\\books\\{image}", "products");
-        //        book.BookImages.Add(new BookImage { ImageId = imageId });
-        //    }
+            foreach (string? image in images)
+            {
+                Guid imageId = await _azureBlobHelper.UploadAzureBlobAsync($"{Environment.CurrentDirectory}\\wwwroot\\images\\books\\{image}", "products");
+                book.BookImages.Add(new BookImage { ImageId = imageId });
+            }
 
-        //    _context.Books.Add(book);
-        //}
+            _context.Books.Add(book);
+        }
 
         //private async Task PopulateRolesAsync()
         //{
