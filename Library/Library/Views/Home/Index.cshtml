@@ -3,6 +3,29 @@
 }
 
 <div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+    <h1 class="display-4">Biblioteca</h1>
+
+    <section class="contener">
+        <div class="row">
+            <div class="col-4">
+                <article>
+                    <img src="~/images/biblioteca.png" width="320">
+                    <a class="nav-link text-dark" asp-area="" asp-controller="Books" asp-action="Index">Libros</a>
+                </article>
+            </div>
+            <div class="col-4">
+                <article>
+                    <img src="~/images/usuarios.jpg" width="250">
+                    <a class="nav-link text-dark" asp-area="" asp-controller="Users" asp-action="Index">Usuarios</a>
+                </article>
+            </div>
+            <div class="col-4">
+                <article>
+                    <img src="~/images/books.png" width="300">
+                    <a class="nav-link text-dark" asp-area="" asp-controller="Catalogues" asp-action="Index">Catálogos</a>
+                </article>
+            </div>
+        </div>
+    </section>
 </div>
+
