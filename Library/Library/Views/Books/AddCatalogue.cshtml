@@ -1,0 +1,37 @@
+﻿@model Library.Models.AddBookCatalogueViewModel
+
+@{
+    ViewData["Title"] = "Create";
+}
+
+<h1>Crear</h1>
+
+<h4>Catálogo / Libro</h4>
+<hr />
+<div class="row">
+    <div class="col-md-6">
+        <form asp-action="AddCatalogue" enctype="multipart/form-data">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+            <input type="hidden" asp-for="BookId" />
+            <input type="hidden" asp-for="Catalogues" />
+
+            <div class="input-group mb-3">
+                <label asp-for="CatalogueId" class="input-group-text"></label>
+                <select asp-for="CatalogueId" asp-items="Model.Catalogues" class="form-control"></select>
+                <span asp-validation-for="CatalogueId" class="text-danger"></span>
+            </div>
+
+            <div class="form-group mt-2">
+                <input type="submit" value="Crear" class="btn btn-outline-primary" />
+                <a asp-action="Details" asp-route-bookId="@Model.BookId" class="btn btn-outline-success">Regresar</a>
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

@@ -12,8 +12,8 @@
 
 <div>
     <a asp-action="AddImage" asp-route-bookId="@Model?.Id" class="btn btn-outline-primary">Adicionar Imagen</a>
-    <a asp-action="AddCatalogue" asp-route-bookId="@Model?.Id" class="btn btn-outline-secondary">Adicionar Categoría</a>
-    <a asp-action="Edit" asp-route-bookId="@Model?.Id" class="btn btn-outline-warning">Editar Producto</a>
+    <a asp-action="AddCatalogue" asp-route-bookId="@Model?.Id" class="btn btn-outline-secondary">Adicionar Catálogo</a>
+    <a asp-action="Edit" asp-route-bookId="@Model?.Id" class="btn btn-outline-warning">Editar libro</a>
     <a asp-action="Index" class="btn btn-outline-success">Regresar</a>
 </div>
 
@@ -75,7 +75,7 @@
                                     @Html.DisplayFor(modelItem => catalogue.Catalogue.Name)
                                 </td>
                                 <td>
-                                    <a asp-action="DeleteCategory" asp-route-bookId="@catalogue.Id" class="btn btn-outline-danger">Borrar catálogo</a>
+                                    <a asp-action="DeleteCatalogue" asp-route-bookId="@catalogue.Id" class="btn btn-outline-danger">Borrar catálogo</a>
                                 </td>
                             </tr>
                         }

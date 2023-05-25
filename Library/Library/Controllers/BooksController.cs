@@ -256,6 +256,110 @@ namespace Library.Controllers
             }
             return View(addBookImageViewModel);
         }
+
+        public async Task<IActionResult> DeleteImage(Guid? imageId)
+        {
+            if (imageId == null) return NotFound();
+
+            BookImage bookImage = await _context.BookImages
+                .Include(bi => bi.Book)
+                .FirstOrDefaultAsync(pi => pi.Id.Equals(imageId));
+
+            if (bookImage == null) return NotFound();
+
+            await _azureBlobHelper.DeleteAzureBlobAsync(bookImage.ImageId, "products");
+
+            _context.BookImages.Remove(bookImage);
+            await _context.SaveChangesAsync();
+            return RedirectToAction(nameof(Details), new { bookId = bookImage.Book.Id });
+        }
+        #endregion
+
+        #region Catalogue actions
+        [HttpGet]
+        public async Task<IActionResult> AddCatalogue(Guid? bookId)
+        {
+            if (bookId == null) return NotFound();
+
+            Book book = await _context.Books
+                .Include(b => b.BookCatalogues)
+                .ThenInclude(bc => bc.Catalogue)
+                .FirstOrDefaultAsync(p => p.Id.Equals(bookId));
+
+            if (book == null) return NotFound();
+
+            List<Catalogue> categories = book.BookCatalogues.Select(bc => new Catalogue
+            {
+                Id = bc.Catalogue.Id,
+                Name = bc.Catalogue.Name
+            }).ToList();
+
+            AddBookCatalogueViewModel bookCatalogueViewModel = new()
+            {
+                BookId = book.Id,
+                Catalogues = await _dropDownListHelper.GetDDLCataloguesAsync(),
+            };
+            return View(bookCatalogueViewModel);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> AddCatalogue(AddBookCatalogueViewModel addBookCatalogueView)
+        {
+            Book book = await _context.Books
+                .Include(b => b.BookCatalogues)
+                .ThenInclude(bc => bc.Catalogue)
+                .FirstOrDefaultAsync(b => b.Id.Equals(addBookCatalogueView.BookId));
+
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    Catalogue catalogue = await _context.Catalogues.FindAsync(addBookCatalogueView.CatalogueId);
+
+                    if (book == null || catalogue == null) return NotFound();
+
+                    BookCatalogue bookCatalogue = new()
+                    {
+                        Book = book,
+                        Catalogue = catalogue
+                    };
+
+                    _context.Add(bookCatalogue);
+                    await _context.SaveChangesAsync();
+                    return RedirectToAction(nameof(Details), new { bookId = book.Id });
+                }
+                catch (Exception ex)
+                {
+                    addBookCatalogueView.Catalogues = await _dropDownListHelper.GetDDLCataloguesAsync();
+                    ModelState.AddModelError(string.Empty, ex.Message);
+                }
+            }
+
+            List<Catalogue> categories = book.BookCatalogues.Select(bc => new Catalogue
+            {
+                Id = bc.Catalogue.Id,
+                Name = bc.Catalogue.Name
+            }).ToList();
+
+            addBookCatalogueView.Catalogues = await _dropDownListHelper.GetDDLCataloguesAsync();
+            return View(addBookCatalogueView);
+        }
+
+        public async Task<IActionResult> DeleteCatalogue(Guid? bookId)
+        {
+            if (bookId == null) return NotFound();
+
+            BookCatalogue bookCatalogue = await _context.BookCatalogues
+                .Include(bc => bc.Book)
+                .FirstOrDefaultAsync(bc => bc.Id.Equals(bookId));
+
+            if (bookCatalogue == null) return NotFound();
+
+            _context.BookCatalogues.Remove(bookCatalogue);
+            await _context.SaveChangesAsync();
+            return RedirectToAction(nameof(Details), new { bookId = bookCatalogue.Book.Id });
+        }
         #endregion
     }
 }
