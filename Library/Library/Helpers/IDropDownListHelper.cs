@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc.Rendering;
+﻿using Library.DAL.Entities;
+using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace Library.Helpers
 {
@@ -6,6 +7,6 @@ namespace Library.Helpers
     {
         Task<IEnumerable<SelectListItem>> GetDDLCataloguesAsync();
 
-        //Task<IEnumerable<SelectListItem>> GetDDLCataloguesAsync(IEnumerable<Catalogue> filterCatatalogues);
+        Task<IEnumerable<SelectListItem>> GetDDLCataloguesAsync(IEnumerable<Catalogue> filterCatatalogues);
     }
 }

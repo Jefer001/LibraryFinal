@@ -3,6 +3,7 @@ using Library.DAL.Entities;
 using Library.Helpers;
 using Library.Models;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.CodeAnalysis;
 using Microsoft.EntityFrameworkCore;
 
 namespace Library.Controllers
@@ -289,7 +290,7 @@ namespace Library.Controllers
 
             if (book == null) return NotFound();
 
-            List<Catalogue> categories = book.BookCatalogues.Select(bc => new Catalogue
+            List<Catalogue> catalogues = book.BookCatalogues.Select(bc => new Catalogue
             {
                 Id = bc.Catalogue.Id,
                 Name = bc.Catalogue.Name
@@ -298,7 +299,7 @@ namespace Library.Controllers
             AddBookCatalogueViewModel bookCatalogueViewModel = new()
             {
                 BookId = book.Id,
-                Catalogues = await _dropDownListHelper.GetDDLCataloguesAsync(),
+                Catalogues = await _dropDownListHelper.GetDDLCataloguesAsync(catalogues)
             };
             return View(bookCatalogueViewModel);
         }
@@ -337,13 +338,13 @@ namespace Library.Controllers
                 }
             }
 
-            List<Catalogue> categories = book.BookCatalogues.Select(bc => new Catalogue
+            List<Catalogue> catalogues = book.BookCatalogues.Select(bc => new Catalogue
             {
                 Id = bc.Catalogue.Id,
                 Name = bc.Catalogue.Name
             }).ToList();
 
-            addBookCatalogueView.Catalogues = await _dropDownListHelper.GetDDLCataloguesAsync();
+            addBookCatalogueView.Catalogues = await _dropDownListHelper.GetDDLCataloguesAsync(catalogues);
             return View(addBookCatalogueView);
         }
 

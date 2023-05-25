@@ -41,33 +41,33 @@ namespace Library.Services
             return listCatalogues;
         }
 
-        //public async Task<IEnumerable<SelectListItem>> GetDDLCataloguesAsync(IEnumerable<Catalogue> filterCatatalogues)
-        //{
-        //    List<Catalogue> catalogue = await _context.Catalogues.ToListAsync();
-        //    List<Catalogue> filterCatatalogues = new();
+        public async Task<IEnumerable<SelectListItem>> GetDDLCataloguesAsync(IEnumerable<Catalogue> filterCatatalogues)
+        {
+            List<Catalogue> catalogues = await _context.Catalogues.ToListAsync();
+            List<Catalogue> catalogueFiltered = new();
 
-        //    foreach (Catalogue catalogues in catalogue)
-        //        if (!filterCatatalogues.Any(c => c.Id.Equals(catalogue.Id)))
-        //            catataloguesFiltered.Add(catalogue);
+            foreach (Catalogue catalogue in catalogues)
+                if (!filterCatatalogues.Any(c => c.Id.Equals(catalogue.Id)))
+                    catalogueFiltered.Add(catalogue);
 
-        //    List<SelectListItem> ListCatalogues = catataloguesFiltered
-        //        .Select(c => new SelectListItem
-        //        {
-        //            Text = c.Name,
-        //            Value = c.Id.ToString()
-        //        })
-        //        .OrderBy(c => c.Text)
-        //        .ToList();
+            List<SelectListItem> ListCatalogues = catalogueFiltered
+                .Select(c => new SelectListItem
+                {
+                    Text = c.Name,
+                    Value = c.Id.ToString()
+                })
+                .OrderBy(c => c.Text)
+                .ToList();
 
-        //    ListCatalogues.Insert(0, new SelectListItem
-        //    {
-        //        Text = "Seleccione un catálogo...",
-        //        Value = Guid.Empty.ToString(),
-        //        Selected = true
-        //    });
+            ListCatalogues.Insert(0, new SelectListItem
+            {
+                Text = "Seleccione un catálogo...",
+                Value = Guid.Empty.ToString(),
+                Selected = true
+            });
 
-        //    return ListCatalogues;
-        //}
+            return ListCatalogues;
+        }
         #endregion
     }
 }
