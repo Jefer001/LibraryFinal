@@ -80,10 +80,7 @@ namespace Library.Controllers
                     {
                         book.BookImages = new List<BookImage>()
                         {
-                            new BookImage {
-                                ImageId = imageId,
-                                CreatedDate = DateTime.Now
-                            }
+                            new BookImage { ImageId = imageId }
                         };
                     }
 
@@ -108,46 +105,55 @@ namespace Library.Controllers
         }
 
         // GET: Books/Edit/5
-        public async Task<IActionResult> Edit(Guid? id)
+        public async Task<IActionResult> Edit(Guid? bookId)
         {
-            if (id == null || _context.Books == null) return NotFound();
+            if (bookId == null) return NotFound();
 
-            var book = await _context.Books.FindAsync(id);
-
+            Book book = await _context.Books.FindAsync(bookId);
             if (book == null) return NotFound();
 
-            return View(book);
+            EdtitBookViewModel edtitBookViewModel = new()
+            {
+                Id = book.Id,
+                Name = book.Name,
+                Author = book.Author,
+                Stock = book.Stock
+            };
+            return View(edtitBookViewModel);
         }
 
         // POST: Books/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(Guid id, Book book)
+        public async Task<IActionResult> Edit(Guid? Id, EdtitBookViewModel edtitBookViewModel)
         {
-            if (id != book.Id) return NotFound();
+            if (Id != edtitBookViewModel.Id) return NotFound();
 
-            if (ModelState.IsValid)
+            try
             {
-                try
-                {
-                    book.ModifiedDate = DateTime.Now;
-                    _context.Update(book);
-                    await _context.SaveChangesAsync();
-                    return RedirectToAction(nameof(Index));
-                }
-                catch (DbUpdateException dbUpdateException)
-                {
-                    if (dbUpdateException.InnerException.Message.Contains("duplicate"))
-                        ModelState.AddModelError(string.Empty, "Ya existe un libro con el mismo nombre.");
-                    else
-                        ModelState.AddModelError(string.Empty, dbUpdateException.InnerException.Message);
-                }
-                catch (Exception ex)
-                {
-                    ModelState.AddModelError(string.Empty, ex.Message);
-                }
+                Book book = await _context.Books.FindAsync(edtitBookViewModel.Id);
+
+                book.Name = edtitBookViewModel.Name;
+                book.Author = edtitBookViewModel.Author;
+                book.Stock = edtitBookViewModel.Stock;
+                book.ModifiedDate = DateTime.Now;
+
+                _context.Update(book);
+                await _context.SaveChangesAsync();
+                return RedirectToAction(nameof(Index));
             }
-            return View(book);
+            catch (DbUpdateException dbUpdateException)
+            {
+                if (dbUpdateException.InnerException.Message.Contains("duplicate"))
+                    ModelState.AddModelError(string.Empty, "Ya existe un libro con el mismo nombre.");
+                else
+                    ModelState.AddModelError(string.Empty, dbUpdateException.InnerException.Message);
+            }
+            catch (Exception ex)
+            {
+                ModelState.AddModelError(string.Empty, ex.Message);
+            }
+            return View(edtitBookViewModel);
         }
 
         // GET: Books/Details/5

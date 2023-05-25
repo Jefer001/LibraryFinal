@@ -1,0 +1,24 @@
+﻿@model Library.Models.EdtitBookViewModel
+
+<div class="row">
+    <div class="col-md-6">
+        <div class="input-group mb-3">
+            <label asp-for="Name" class="input-group-text"></label>
+            <input asp-for="Name" class="form-control" />
+            <span asp-validation-for="Name" class="text-danger"></span>
+        </div>
+        <div class="input-group mb-3">
+            <label asp-for="Author" class="input-group-text"></label>
+            <input asp-for="Author" class="form-control" />
+            <span asp-validation-for="Author" class="text-danger"></span>
+        </div>
+    </div>
+
+    <div class="col-md-6">
+        <div class="input-group mb-3">
+            <label asp-for="Stock" class="input-group-text"></label>
+            <input asp-for="Stock" class="form-control" />
+            <span asp-validation-for="Stock" class="text-danger"></span>
+        </div>
+    </div>
+</div>

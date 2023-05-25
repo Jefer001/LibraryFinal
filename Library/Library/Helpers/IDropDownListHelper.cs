@@ -1,5 +1,4 @@
-﻿using Library.DAL.Entities;
-using Microsoft.AspNetCore.Mvc.Rendering;
+﻿using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace Library.Helpers
 {
