@@ -26,7 +26,7 @@ namespace Library.DAL
         {
             await _context.Database.EnsureCreatedAsync();
 
-            await PopulateliteraryGendersAsync();
+            await PopulateCataloguessAsync();
             await PopulateBookAsync();
             //await PopulateRolesAsync();
             //await PopulateUserAsync("Steve", "Jobs", "steve_jobs_admin@yopmail.com", "3002323232", "Street Apple", "102030", "admin_use.png", UserType.Admin);
@@ -37,7 +37,7 @@ namespace Library.DAL
         #endregion
 
         #region Private methods
-        private async Task PopulateliteraryGendersAsync()
+        private async Task PopulateCataloguessAsync()
         {
             if (!_context.Catalogues.Any())
             {
