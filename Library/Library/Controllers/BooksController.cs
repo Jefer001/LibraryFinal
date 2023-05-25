@@ -157,11 +157,15 @@ namespace Library.Controllers
         }
 
         // GET: Books/Details/5
-        public async Task<IActionResult> Details(Guid? id)
+        public async Task<IActionResult> Details(Guid? bookId)
         {
-            if (id == null || _context.Books == null) return NotFound();
+            if (bookId == null) return NotFound();
 
-            var book = await _context.Books.FirstOrDefaultAsync(b => b.Id.Equals(id));
+            Book book = await _context.Books
+                .Include(b => b.BookImages)
+                .Include(b => b.BookCatalogues)
+                .ThenInclude(bc => bc.Catalogue)
+                .FirstOrDefaultAsync(p => p.Id.Equals(bookId));
 
             if (book == null) return NotFound();
 
