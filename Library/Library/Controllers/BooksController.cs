@@ -177,11 +177,14 @@ namespace Library.Controllers
         }
 
         // GET: Books/Delete/5
-        public async Task<IActionResult> Delete(Guid? id)
+        public async Task<IActionResult> Delete(Guid? bookId)
         {
-            if (id == null || _context.Books == null) return NotFound();
+            if (bookId == null) return NotFound();
 
-            var book = await _context.Books.FirstOrDefaultAsync(b => b.Id.Equals(id));
+            Book book = await _context.Books
+                .Include(b => b.BookCatalogues)
+                .Include(b => b.BookImages)
+                .FirstOrDefaultAsync(b => b.Id.Equals(bookId));
 
             if (book == null) return NotFound();
 
@@ -191,22 +194,20 @@ namespace Library.Controllers
         // POST: Books/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(Guid id)
+        public async Task<IActionResult> Delete(Book bookModel)
         {
-            if (_context.Books == null) return Problem("Entity set 'DataBaseContext.Books'  is null.");
+            Book book = await _context.Books
+                .Include(b => b.BookImages)
+                .Include(b => b.BookCatalogues)
+                .FirstOrDefaultAsync(b => b.Id.Equals(bookModel.Id));
 
-            var book = await _context.Books.FindAsync(id);
-
-            if (book != null) _context.Books.Remove(book);
-
+            _context.Books.Remove(book);
             await _context.SaveChangesAsync();
 
-            return RedirectToAction(nameof(Index));
-        }
+            foreach (BookImage bookImage in book.BookImages)
+                await _azureBlobHelper.DeleteAzureBlobAsync(bookImage.ImageId, "products");
 
-        private bool BookExists(Guid id)
-        {
-            return (_context.Books?.Any(b => b.Id.Equals(id))).GetValueOrDefault();
+            return RedirectToAction(nameof(Index));
         }
         #endregion
 

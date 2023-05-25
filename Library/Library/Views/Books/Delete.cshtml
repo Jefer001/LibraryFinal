@@ -8,13 +8,9 @@
 
 <h3>¿Estás seguro que deseas eliminar este libro?</h3>
 <div>
-    <h4>Book</h4>
-    <hr />
-    <dl class="row">
-        
-        <partial name="../Shared/PartialViews/_BookDeleteDetails" />
 
-    </dl>
+        <partial name="../Shared/PartialViews/_BookDetails" />
+
     <form asp-action="Delete">
         <input type="hidden" asp-for="Id" />
 
