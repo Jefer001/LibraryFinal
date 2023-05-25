@@ -80,7 +80,11 @@ namespace Library.Controllers
                     {
                         book.BookImages = new List<BookImage>()
                         {
-                            new BookImage { ImageId = imageId }
+                            new BookImage 
+                            {
+                                CreatedDate = DateTime.Now,
+                                ImageId = imageId
+                            }
                         };
                     }
 
@@ -203,6 +207,54 @@ namespace Library.Controllers
         private bool BookExists(Guid id)
         {
             return (_context.Books?.Any(b => b.Id.Equals(id))).GetValueOrDefault();
+        }
+        #endregion
+
+        #region Image actions
+        [HttpGet]
+        public async Task<IActionResult> AddImage(Guid? bookId)
+        {
+            if (bookId == null) return NotFound();
+
+            Book book = await _context.Books.FindAsync(bookId);
+            if (book == null) return NotFound();
+
+            AddBookImageViewModel addBookImageView = new()
+            {
+                BookId = book.Id
+            };
+            return View(addBookImageView);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> AddImage(AddBookImageViewModel addBookImageViewModel)
+        {
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    Guid imageId = await _azureBlobHelper.UploadAzureBlobAsync(addBookImageViewModel.ImageFile, "products");
+
+                    Book book = await _context.Books.FindAsync(addBookImageViewModel.BookId);
+
+                    BookImage bookImage = new()
+                    {
+                        Book = book,
+                        ImageId = imageId,
+                        CreatedDate = DateTime.Now
+                    };
+
+                    _context.Add(bookImage);
+                    await _context.SaveChangesAsync();
+                    return RedirectToAction(nameof(Details), new { bookId = book.Id });
+                }
+                catch (Exception ex)
+                {
+                    ModelState.AddModelError(string.Empty, ex.Message);
+                }
+            }
+            return View(addBookImageViewModel);
         }
         #endregion
     }
