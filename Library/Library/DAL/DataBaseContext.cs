@@ -1,9 +1,10 @@
 ﻿using Library.DAL.Entities;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
 namespace Library.DAL
 {
-    public class DataBaseContext : DbContext
+    public class DataBaseContext : IdentityDbContext<User>
     {
         #region Builder
         public DataBaseContext(DbContextOptions<DataBaseContext> option) : base(option)
@@ -16,6 +17,7 @@ namespace Library.DAL
         public DbSet<Catalogue> Catalogues { get; set; }
         public DbSet<BookCatalogue> BookCatalogues { get; set; }
         public DbSet<BookImage> BookImages { get; set; }
+        public DbSet<University> Universities { get; set; }
         #endregion
 
         #region Indices
@@ -24,6 +26,7 @@ namespace Library.DAL
             base.OnModelCreating(modelBuilder);
             modelBuilder.Entity<Book>().HasIndex("Name", "Author").IsUnique();
             modelBuilder.Entity<Catalogue>().HasIndex(l => l.Name).IsUnique();
+            modelBuilder.Entity<University>().HasIndex(u => u.Name).IsUnique();
         }
         #endregion
     }
