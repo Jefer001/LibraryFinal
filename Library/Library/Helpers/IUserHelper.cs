@@ -1,4 +1,5 @@
 ﻿using Library.DAL.Entities;
+using Library.Models;
 using Microsoft.AspNetCore.Identity;
 
 namespace Library.Helpers
@@ -14,5 +15,9 @@ namespace Library.Helpers
         Task AddUserToRoleAsync(User user, string roleName);
 
         Task<bool> IsUserInRoleAsync(User user, string roleName);
+
+        Task<SignInResult> LoginAsync(LoginViewModel loginViewModel);
+
+        Task LogoutAsync();
     }
 }

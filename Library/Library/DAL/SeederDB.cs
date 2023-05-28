@@ -29,6 +29,7 @@ namespace Library.DAL
 
             await PopulateCataloguessAsync();
             await PopulateBookAsync();
+            //await PopulateUniversityAsync();
             await PopulateRolesAsync();
             await PopulateUserAsync("Admin", "Librarian", "admin@yopmail.com", "3002323232", "Street Apple", "102030", "admin_use.png", UserType.Admin);
             await PopulateUserAsync("User", "Studen", "user@yopmail.com", "4005656656", "Street Microsoft", "405060", "user.png", UserType.User);
@@ -62,8 +63,8 @@ namespace Library.DAL
         {
             if (!_context.Universities.Any())
             {
-                await AddUniversitytAsync("Instición universitaria", new List<string>() { "itm.png" });
-                await AddUniversitytAsync("Universidad de Antioquia", new List<string>() { "UdeA.png" });
+                await AddUniversitytAsync("Instición universitaria", "itm.png");
+                await AddUniversitytAsync("Universidad de Antioquia", "UdeA.png");
             }
         }
 
@@ -92,21 +93,15 @@ namespace Library.DAL
             _context.Books.Add(book);
         }
 
-        private async Task AddUniversitytAsync(string name, List<string> images)
+        private async Task AddUniversitytAsync(string name, string image)
         {
-            Book book = new()
+            Guid imageId = await _azureBlobHelper.UploadAzureBlobAsync($"{Environment.CurrentDirectory}\\wwwroot\\images\\universities\\{image}", "products");
+            University university = new()
             {
                 Name = name,
-                BookImages = new List<BookImage>()
+                ImageId = imageId
             };
-
-            foreach (string? image in images)
-            {
-                Guid imageId = await _azureBlobHelper.UploadAzureBlobAsync($"{Environment.CurrentDirectory}\\wwwroot\\images\\universities\\{image}", "products");
-                book.BookImages.Add(new BookImage { ImageId = imageId });
-            }
-
-            _context.Books.Add(book);
+            _context.Universities.Add(university);
         }
 
         private async Task PopulateRolesAsync()
