@@ -29,7 +29,7 @@ namespace Library.DAL
 
             await PopulateCataloguessAsync();
             await PopulateBookAsync();
-            //await PopulateUniversityAsync();
+            await PopulateUniversityAsync();
             await PopulateRolesAsync();
             await PopulateUserAsync("Admin", "Librarian", "admin@yopmail.com", "3002323232", "Street Apple", "102030", "admin_use.png", UserType.Admin);
             await PopulateUserAsync("User", "Studen", "user@yopmail.com", "4005656656", "Street Microsoft", "405060", "user.png", UserType.User);
@@ -63,7 +63,7 @@ namespace Library.DAL
         {
             if (!_context.Universities.Any())
             {
-                await AddUniversitytAsync("Instición universitaria", "itm.png");
+                await AddUniversitytAsync("Institución universitaria", "itm.png");
                 await AddUniversitytAsync("Universidad de Antioquia", "UdeA.png");
             }
         }
@@ -98,6 +98,7 @@ namespace Library.DAL
             Guid imageId = await _azureBlobHelper.UploadAzureBlobAsync($"{Environment.CurrentDirectory}\\wwwroot\\images\\universities\\{image}", "products");
             University university = new()
             {
+                CreatedDate = DateTime.Now,
                 Name = name,
                 ImageId = imageId
             };

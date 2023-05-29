@@ -1,4 +1,4 @@
-﻿@model Library.DAL.Entities.Catalogue
+﻿@model Library.DAL.Entities.University
 
 @{
     ViewData["Title"] = "Delete";
@@ -6,10 +6,10 @@
 
 <h1>Eliminar</h1>
 
-<h3>¿Estás seguro que deseas eliminar este género litarario?</h3>
+<h3>¿Estás seguro que deseas eliminar esta universidad?</h3>
 <div>
 
-    <partial name="../Shared/PartialViews/_CatalogueDeleteDetails" />
+    <partial name="../Shared/PartialViews/_UniversityDeleteDetails" />
     
     <form asp-action="Delete">
         <input type="hidden" asp-for="Id" />
@@ -18,3 +18,9 @@
         <a asp-action="Index" class="btn btn-outline-success">Regresar</a>
     </form>
 </div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}
