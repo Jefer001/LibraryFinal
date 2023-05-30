@@ -1,6 +1,9 @@
 ﻿using Library.DAL;
+using Library.DAL.Entities;
+using Library.Enum;
 using Library.Helpers;
 using Library.Models;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Library.Controllers
@@ -58,5 +61,125 @@ namespace Library.Controllers
         {
             return View();
         }
+
+        #region Register actions
+        [HttpGet]
+        public async Task<IActionResult> Register()
+        {
+            AddUserViewModel addUserViewModel = new()
+            {
+                Id = Guid.Empty,
+                Universities = await _dropDownListHelper.GetDDLUniversitiesAsync(),
+                UserType = UserType.User,
+            };
+
+            return View(addUserViewModel);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Register(AddUserViewModel addUserViewModel)
+        {
+            if (ModelState.IsValid)
+            {
+                Guid imageId = Guid.Empty;
+
+                if (addUserViewModel.ImageFile != null)
+                    imageId = await _azureBlobHelper.UploadAzureBlobAsync(addUserViewModel.ImageFile, "users");
+
+                addUserViewModel.ImageId = imageId;
+                addUserViewModel.CreatedDate = DateTime.Now;
+
+                User user = await _userHelpers.AddUserAsync(addUserViewModel);
+                if (user == null)
+                {
+                    ModelState.AddModelError(string.Empty, "Este correo ya está siendo usado.");
+                    await FillDropDownListLocation(addUserViewModel);
+
+                    return View(addUserViewModel);
+                }
+
+                //Autologeamos al nuevo usuario que se registra
+                LoginViewModel loginViewModel = new()
+                {
+                    Password = addUserViewModel.Password,
+                    Username = addUserViewModel.Username,
+                    RememberMe = false
+                };
+
+                var login = await _userHelpers.LoginAsync(loginViewModel);
+
+                if (login.Succeeded) return RedirectToAction("Index", "Home");
+            }
+            await FillDropDownListLocation(addUserViewModel);
+
+            return View(addUserViewModel);
+        }
+
+        //[HttpGet]
+        //public async Task<IActionResult> EditUser()
+        //{
+        //    User user = await _userHelpers.GetUserAsync(User.Identity.Name);
+        //    if (user == null) return NotFound();
+
+        //    EditUserViewModel editUserViewModel = new()
+        //    {
+        //        Document = user.Document,
+        //        FirstName = user.FirstName,
+        //        LastName = user.LastName,
+        //        Address = user.Address,
+        //        PhoneNumber = user.PhoneNumber,
+        //        ImageId = user.ImageId,
+        //        Universities = await _dropDownListHelper.GetDDLUniversitiesAsync(),
+        //        UniversityId = user.University.Id,
+        //        Id = Guid.Parse(user.Id)
+        //    };
+        //    return View(editUserViewModel);
+        //}
+
+        //[HttpPost]
+        //[ValidateAntiForgeryToken]
+        //public async Task<IActionResult> EditUser(EditUserViewModel editUserViewModel)
+        //{
+        //    if (ModelState.IsValid)
+        //    {
+        //        Guid imageId = editUserViewModel.ImageId;
+        //        if (editUserViewModel.ImageFile != null) imageId = await _azureBlobHelper.UploadAzureBlobAsync(editUserViewModel.ImageFile, "users");
+
+        //        User user = await _userHelpers.GetUserAsync(User.Identity.Name);
+        //        user.FirstName = editUserViewModel.FirstName;
+        //        user.LastName = editUserViewModel.LastName;
+        //        user.Document = editUserViewModel.Document;
+        //        user.Address = editUserViewModel.Address;
+        //        user.PhoneNumber = editUserViewModel.PhoneNumber;
+        //        user.ImageId = imageId;
+        //        user.University = await _context.Universities.FindAsync(editUserViewModel.UniversityId);
+
+        //        IdentityResult result = await _userHelpers.UpdateUserAsync(user);
+        //        if (result.Succeeded) return RedirectToAction("Index", "Home");
+        //        else ModelState.AddModelError(string.Empty, result.Errors.FirstOrDefault().Description);
+        //    }
+        //    await FillDropDownListLocation(editUserViewModel);
+        //    return View(editUserViewModel);
+        //}
+
+        [HttpGet]
+        public IActionResult ChangePassword()
+        {
+            return View();
+        }
+        #endregion
+
+        #region Private methods
+        private async Task FillDropDownListLocation(AddUserViewModel addUserViewModel)
+        {
+            addUserViewModel.Universities = await _dropDownListHelper.GetDDLUniversitiesAsync();
+        }
+
+        private async Task FillDropDownListLocation(EditUserViewModel editUserViewModel)
+        {
+            editUserViewModel.Universities = await _dropDownListHelper.GetDDLUniversitiesAsync();
+        }
+        #endregion
     }
 }

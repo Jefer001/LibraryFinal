@@ -68,6 +68,27 @@ namespace Library.Services
 
             return ListCatalogues;
         }
+
+        public async Task<IEnumerable<SelectListItem>> GetDDLUniversitiesAsync()
+        {
+            List<SelectListItem> listUniversities = await _context.Universities
+                .Select(c => new SelectListItem
+                {
+                    Text = c.Name,
+                    Value = c.Id.ToString(),
+                })
+                .OrderBy(c => c.Text)
+                .ToListAsync();
+
+            listUniversities.Insert(0, new SelectListItem
+            {
+                Text = "Seleccione una universidad...",
+                Value = Guid.Empty.ToString(),
+                Selected = true
+            });
+
+            return listUniversities;
+        }
         #endregion
     }
 }

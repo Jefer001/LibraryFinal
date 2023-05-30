@@ -7,6 +7,8 @@ namespace Library.Helpers
     {
         Task<IEnumerable<SelectListItem>> GetDDLCataloguesAsync();
 
+        Task<IEnumerable<SelectListItem>> GetDDLUniversitiesAsync();
+
         Task<IEnumerable<SelectListItem>> GetDDLCataloguesAsync(IEnumerable<Catalogue> filterCatatalogues);
     }
 }
