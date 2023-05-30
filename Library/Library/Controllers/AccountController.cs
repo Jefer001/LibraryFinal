@@ -116,58 +116,84 @@ namespace Library.Controllers
             return View(addUserViewModel);
         }
 
-        //[HttpGet]
-        //public async Task<IActionResult> EditUser()
-        //{
-        //    User user = await _userHelpers.GetUserAsync(User.Identity.Name);
-        //    if (user == null) return NotFound();
+        [HttpGet]
+        public async Task<IActionResult> EditUser()
+        {
+            User user = await _userHelpers.GetUserAsync(User.Identity.Name);
+            if (user == null) return NotFound();
 
-        //    EditUserViewModel editUserViewModel = new()
-        //    {
-        //        Document = user.Document,
-        //        FirstName = user.FirstName,
-        //        LastName = user.LastName,
-        //        Address = user.Address,
-        //        PhoneNumber = user.PhoneNumber,
-        //        ImageId = user.ImageId,
-        //        Universities = await _dropDownListHelper.GetDDLUniversitiesAsync(),
-        //        UniversityId = user.University.Id,
-        //        Id = Guid.Parse(user.Id)
-        //    };
-        //    return View(editUserViewModel);
+            EditUserViewModel editUserViewModel = new()
+            {
+                Document = user.Document,
+                FirstName = user.FirstName,
+                LastName = user.LastName,
+                Address = user.Address,
+                PhoneNumber = user.PhoneNumber,
+                ImageId = user.ImageId,
+                Universities = await _dropDownListHelper.GetDDLUniversitiesAsync(),
+                UniversityId = user.University.Id,
+                Id = Guid.Parse(user.Id)
+            };
+            return View(editUserViewModel);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> EditUser(EditUserViewModel editUserViewModel)
+        {
+            if (ModelState.IsValid)
+            {
+                Guid imageId = editUserViewModel.ImageId;
+                if (editUserViewModel.ImageFile != null) imageId = await _azureBlobHelper.UploadAzureBlobAsync(editUserViewModel.ImageFile, "users");
+
+                User user = await _userHelpers.GetUserAsync(User.Identity.Name);
+
+                user.FirstName = editUserViewModel.FirstName;
+                user.LastName = editUserViewModel.LastName;
+                user.Document = editUserViewModel.Document;
+                user.Address = editUserViewModel.Address;
+                user.PhoneNumber = editUserViewModel.PhoneNumber;
+                user.ImageId = imageId;
+                user.University = await _context.Universities.FindAsync(editUserViewModel.UniversityId);
+
+                IdentityResult result = await _userHelpers.UpdateUserAsync(user);
+                if (result.Succeeded) return RedirectToAction("Index", "Home");
+                else ModelState.AddModelError(string.Empty, result.Errors.FirstOrDefault().Description);
+            }
+            await FillDropDownListLocation(editUserViewModel);
+            return View(editUserViewModel);
+        }
+        #endregion
+
+        #region Change Password actions
+        [HttpGet]
+        //public IActionResult ChangePassword()
+        //{
+        //    return View();
         //}
 
         //[HttpPost]
         //[ValidateAntiForgeryToken]
-        //public async Task<IActionResult> EditUser(EditUserViewModel editUserViewModel)
+        //public async Task<IActionResult> ChangePassword(ChangePasswordViewModel changePasswordViewModel)
         //{
         //    if (ModelState.IsValid)
         //    {
-        //        Guid imageId = editUserViewModel.ImageId;
-        //        if (editUserViewModel.ImageFile != null) imageId = await _azureBlobHelper.UploadAzureBlobAsync(editUserViewModel.ImageFile, "users");
-
-        //        User user = await _userHelpers.GetUserAsync(User.Identity.Name);
-        //        user.FirstName = editUserViewModel.FirstName;
-        //        user.LastName = editUserViewModel.LastName;
-        //        user.Document = editUserViewModel.Document;
-        //        user.Address = editUserViewModel.Address;
-        //        user.PhoneNumber = editUserViewModel.PhoneNumber;
-        //        user.ImageId = imageId;
-        //        user.University = await _context.Universities.FindAsync(editUserViewModel.UniversityId);
-
-        //        IdentityResult result = await _userHelpers.UpdateUserAsync(user);
-        //        if (result.Succeeded) return RedirectToAction("Index", "Home");
-        //        else ModelState.AddModelError(string.Empty, result.Errors.FirstOrDefault().Description);
+        //        if (changePasswordViewModel.OldPassword.Equals(changePasswordViewModel.NewPassword))
+        //        {
+        //            ModelState.AddModelError(string.Empty, "Debes ingresar una contraseña diferente");
+        //            return View(changePasswordViewModel);
+        //        }
+        //        User user = await _userHelpers.GetUserAsync(User.Identity?.Name);
+        //        if (user != null)
+        //        {
+        //            IdentityResult result = await _userHelpers.ChangePasswordAsync(user, changePasswordViewModel.OldPassword, changePasswordViewModel.NewPassword);
+        //            if (result.Succeeded) return RedirectToAction("EditUser");
+        //            else ModelState.AddModelError(string.Empty, result.Errors.FirstOrDefault().Description);
+        //        }
+        //        else ModelState.AddModelError(string.Empty, "Usuario no encontrado.");
         //    }
-        //    await FillDropDownListLocation(editUserViewModel);
-        //    return View(editUserViewModel);
+        //    return View(changePasswordViewModel);
         //}
-
-        [HttpGet]
-        public IActionResult ChangePassword()
-        {
-            return View();
-        }
         #endregion
 
         #region Private methods
