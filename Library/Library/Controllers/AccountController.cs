@@ -167,33 +167,33 @@ namespace Library.Controllers
 
         #region Change Password actions
         [HttpGet]
-        //public IActionResult ChangePassword()
-        //{
-        //    return View();
-        //}
+        public IActionResult ChangePassword()
+        {
+            return View();
+        }
 
-        //[HttpPost]
-        //[ValidateAntiForgeryToken]
-        //public async Task<IActionResult> ChangePassword(ChangePasswordViewModel changePasswordViewModel)
-        //{
-        //    if (ModelState.IsValid)
-        //    {
-        //        if (changePasswordViewModel.OldPassword.Equals(changePasswordViewModel.NewPassword))
-        //        {
-        //            ModelState.AddModelError(string.Empty, "Debes ingresar una contraseña diferente");
-        //            return View(changePasswordViewModel);
-        //        }
-        //        User user = await _userHelpers.GetUserAsync(User.Identity?.Name);
-        //        if (user != null)
-        //        {
-        //            IdentityResult result = await _userHelpers.ChangePasswordAsync(user, changePasswordViewModel.OldPassword, changePasswordViewModel.NewPassword);
-        //            if (result.Succeeded) return RedirectToAction("EditUser");
-        //            else ModelState.AddModelError(string.Empty, result.Errors.FirstOrDefault().Description);
-        //        }
-        //        else ModelState.AddModelError(string.Empty, "Usuario no encontrado.");
-        //    }
-        //    return View(changePasswordViewModel);
-        //}
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> ChangePassword(ChangePasswordViewModel changePasswordViewModel)
+        {
+            if (ModelState.IsValid)
+            {
+                if (changePasswordViewModel.OldPassword.Equals(changePasswordViewModel.NewPassword))
+                {
+                    ModelState.AddModelError(string.Empty, "Debes ingresar una contraseña diferente");
+                    return View(changePasswordViewModel);
+                }
+                User user = await _userHelpers.GetUserAsync(User.Identity?.Name);
+                if (user != null)
+                {
+                    IdentityResult result = await _userHelpers.ChangePasswordAsync(user, changePasswordViewModel.OldPassword, changePasswordViewModel.NewPassword);
+                    if (result.Succeeded) return RedirectToAction("EditUser");
+                    else ModelState.AddModelError(string.Empty, result.Errors.FirstOrDefault().Description);
+                }
+                else ModelState.AddModelError(string.Empty, "Usuario no encontrado.");
+            }
+            return View(changePasswordViewModel);
+        }
         #endregion
 
         #region Private methods
