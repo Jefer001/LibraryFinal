@@ -18,6 +18,7 @@ namespace Library.DAL
         public DbSet<BookCatalogue> BookCatalogues { get; set; }
         public DbSet<BookImage> BookImages { get; set; }
         public DbSet<University> Universities { get; set; }
+        public DbSet<TemporaryLoan> TemporaryLoans { get; set; }
         #endregion
 
         #region Indices
