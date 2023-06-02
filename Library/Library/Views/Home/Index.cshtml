@@ -84,6 +84,9 @@
                                     <div class="card_body">
                                         <img src="@item.ImageFullPath" style="height:150px; max-width:280px;" />
                                     </div>
+                                    <p class="mt-2">
+                                        @item.Author
+                                    </p>
                                     <div class="card_foot">
                                         <a asp-action="DetailsBook" asp-route-bookId="@item.Id" class="btn btn-secondary">Detalles</a>
                                         <a asp-action="AddBookInCart" asp-route-bookId="@item.Id" class="btn btn-primary">Agregar</a>
