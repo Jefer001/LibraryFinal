@@ -7,6 +7,9 @@ namespace Library.DAL.Entities
     public class User : IdentityUser
     {
         #region Properties
+
+        public ICollection<Loan> Loan { get; set; }
+
         [Display(Name = "Fecha de creacíon")]
         public DateTime? CreatedDate { get; set; }
 

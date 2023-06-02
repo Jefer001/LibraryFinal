@@ -2,12 +2,16 @@
 
 namespace Library.DAL.Entities
 {
-    public class TemporaryLoan : Entity
+    public class LoanDetail : Entity
     {
         #region Properties
-        public ICollection<LoanDetail> LoanDetails { get; set; }
+        public Loan Loan { get; set; }
 
-        public User User { get; set; }
+        public TemporaryLoan? TemporaryLoan { get; set; }
+
+        [DataType(DataType.MultilineText)]
+        [Display(Name = "Comentarios")]
+        public string? Remarks { get; set; }
 
         public Book Book { get; set; }
 
@@ -15,10 +19,6 @@ namespace Library.DAL.Entities
         [Display(Name = "Cantidad")]
         [Required(ErrorMessage = "El campo {0} es obligatorio.")]
         public int Quantity { get; set; }
-
-        [DataType(DataType.MultilineText)]
-        [Display(Name = "Comentarios")]
-        public string? Remarks { get; set; }
         #endregion
     }
 }

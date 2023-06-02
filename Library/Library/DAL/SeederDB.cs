@@ -55,7 +55,7 @@ namespace Library.DAL
             if (!_context.Books.Any())
             {
                 await AddBooktAsync("Un pájaro de aire", "María Emilia López", 27, new List<string>() { "Didáctico" }, new List<string>() { "pajaro.png" });
-                await AddBooktAsync("Cien años de soledad", "Gabriel García Márquez", 300, new List<string>() { "Narrativo" }, new List<string>() { "cien.png", "garcia.png" });
+                await AddBooktAsync("Cien años de soledad", "Gabriel García Márquez", 30, new List<string>() { "Narrativo" }, new List<string>() { "cien.png", "garcia.png" });
             }
         }
 

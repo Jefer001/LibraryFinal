@@ -5,6 +5,9 @@ namespace Library.DAL.Entities
     public class Book : Entity
     {
         #region Properties
+
+        public ICollection<LoanDetail> LoanDetails { get; set; }
+
         [Display(Name = "Nombre")]
         [MaxLength(50, ErrorMessage = "El campo {0} debe tener máximo {1} caracteres.")]
         [Required(ErrorMessage = "El campo {0} es obligatorio.")]

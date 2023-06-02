@@ -1,4 +1,5 @@
-﻿using Library.DAL;
+﻿using Library.Common;
+using Library.DAL;
 using Library.DAL.Entities;
 using Library.Helpers;
 using Library.Models;
@@ -15,16 +16,16 @@ namespace Library.Controllers
         private readonly ILogger<HomeController> _logger;
         private readonly DataBaseContext _context;
         private readonly IUserHelper _userHelper;
-        //private readonly IOrderHelper _orderHelper;
+        private readonly ILoanHelper _loanHelper;
         #endregion
 
         #region Builder
-        public HomeController(ILogger<HomeController> logger, DataBaseContext context, IUserHelper userHelper /*IOrderHelper orderHelper*/)
+        public HomeController(ILogger<HomeController> logger, DataBaseContext context, IUserHelper userHelper, ILoanHelper loanHelper)
         {
             _logger = logger;
             _context = context;
             _userHelper = userHelper;
-            //_orderHelper = orderHelper;
+            _loanHelper = loanHelper;
         }
         #endregion
 
@@ -207,10 +208,31 @@ namespace Library.Controllers
 
             return View(showCartViewModel);
         }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> ShowCartAndConfirm(ShowCartViewModel showCartViewModel)
+        {
+            User user = await _userHelper.GetUserAsync(User.Identity.Name);
+            if (user == null) return NotFound();
+
+            showCartViewModel.User = user;
+            showCartViewModel.TemporaryLoans = await _context.TemporaryLoans
+                .Include(tl => tl.Book)
+                .ThenInclude(b => b.BookImages)
+                .Where(tl => tl.User.Id.Equals(user.Id))
+            .ToListAsync();
+
+            Response response = await _loanHelper.ProcessLoanAsync(showCartViewModel);
+            if (response.IsSuccess) return RedirectToAction(nameof(LoanSuccess));
+
+            ModelState.AddModelError(string.Empty, response.Message);
+            return View(showCartViewModel);
+        }
         #endregion
 
         [Authorize]
-        public IActionResult OrderSuccess()
+        public IActionResult LoanSuccess()
         {
             return View();
         }
