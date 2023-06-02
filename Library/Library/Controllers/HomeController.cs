@@ -209,6 +209,52 @@ namespace Library.Controllers
         }
         #endregion
 
+        #region
+        public async Task<IActionResult> DecreaseQuantity(Guid? temporalSaleId)
+        {
+            if (temporalSaleId == null) return NotFound();
+
+            TemporaryLoan temporaryLoan = await _context.TemporaryLoans.FindAsync(temporalSaleId);
+            if (temporaryLoan == null) return NotFound();
+
+            if (temporaryLoan.Quantity > 1)
+            {
+                temporaryLoan.Quantity--;
+                temporaryLoan.ModifiedDate = DateTime.Now;
+                _context.TemporaryLoans.Update(temporaryLoan);
+                await _context.SaveChangesAsync();
+            }
+
+            return RedirectToAction(nameof(ShowCartAndConfirm));
+        }
+
+        public async Task<IActionResult> IncreaseQuantity(Guid? temporalSaleId)
+        {
+            if (temporalSaleId == null) return NotFound();
+
+            TemporaryLoan temporaryLoan = await _context.TemporaryLoans.FindAsync(temporalSaleId);
+            if (temporaryLoan == null) return NotFound();
+
+            temporaryLoan.Quantity++;
+            temporaryLoan.ModifiedDate = DateTime.Now;
+            _context.TemporaryLoans.Update(temporaryLoan);
+            await _context.SaveChangesAsync();
+
+            return RedirectToAction(nameof(ShowCartAndConfirm));
+        }
+
+        public async Task<IActionResult> DeleteTemporalSale(Guid? temporalSaleId)
+        {
+            if (temporalSaleId == null) return NotFound();
+
+            TemporaryLoan temporaryLoan = await _context.TemporaryLoans.FindAsync(temporalSaleId);
+            if (temporaryLoan == null) return NotFound();
+
+            _context.TemporaryLoans.Remove(temporaryLoan);
+            await _context.SaveChangesAsync();
+            return RedirectToAction(nameof(ShowCartAndConfirm));
+        }
+        #endregion
 
         #region Private methods
         private string GetUserFullName()
