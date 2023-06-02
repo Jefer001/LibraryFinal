@@ -90,22 +90,22 @@
                                     @Html.DisplayFor(modelItem => item.Quantity)
                                 </td>
                                 <td class="d-flex flex-column">
-                                    <a asp-action="IncreaseQuantity" asp-route-temporalSaleId="@item.Id" class="btn btn-primary mb-2">+</a>
+                                    <a asp-action="IncreaseQuantity" asp-route-temporaryLoanId="@item.Id" class="btn btn-primary mb-2">+</a>
                                     <br>
                                     <br>
                                     <br>
                                     @if (item.Quantity < 2)
                                     {
-                                        <button asp-action="DecreaseQuantity" asp-route-temporalSaleId="@item.Id" class="btn btn-secondary" disabled>-</button>
+                                        <button asp-action="DecreaseQuantity" asp-route-temporaryLoanId="@item.Id" class="btn btn-secondary" disabled>-</button>
                                     }
                                     else
                                     {
-                                        <a asp-action="DecreaseQuantity" asp-route-temporalSaleId="@item.Id" class="btn btn-secondary">-</a>
+                                        <a asp-action="DecreaseQuantity" asp-route-temporaryLoanId="@item.Id" class="btn btn-secondary">-</a>
                                     }
                                 </td>
                                 <td>
-                                    <a asp-action="EditTemporalSale" asp-route-temporalSaleId="@item.Id" class="btn btn-outline-warning">Editar</a>
-                                    <a asp-action="DeleteTemporalSale" asp-route-temporalSaleId="@item.Id" class="btn btn-outline-danger">Borrar</a>
+                                    <a asp-action="EditTemporaryLoan" asp-route-temporaryLoanId="@item.Id" class="btn btn-outline-warning">Editar</a>
+                                    <a asp-action="DeleteTemporalSale" asp-route-temporaryLoanId="@item.Id" class="btn btn-outline-danger">Borrar</a>
                                 </td>
                             </tr>
                         }

@@ -3,20 +3,18 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Library.Models
 {
-    public class ShowCartViewModel
+    public class EditTemporaryLoanViewModel : Entity
     {
         #region Properties
-        public User User { get; set; }
-
         [DataType(DataType.MultilineText)]
         [Display(Name = "Comentarios")]
         public string? Remarks { get; set; }
 
-        public ICollection<TemporaryLoan> TemporaryLoans { get; set; }
-
         [DisplayFormat(DataFormatString = "{0}")]
         [Display(Name = "Cantidad")]
-        public int Quantity => TemporaryLoans == null ? 0 : TemporaryLoans.Sum(ts => ts.Quantity);
+        [Range(0.0000001, float.MaxValue, ErrorMessage = "Debes de ingresar un valor mayor a cero en la cantidad.")]
+        [Required(ErrorMessage = "El campo {0} es obligatorio.")]
+        public int Quantity { get; set; }
         #endregion
     }
 }

@@ -209,12 +209,18 @@ namespace Library.Controllers
         }
         #endregion
 
-        #region
-        public async Task<IActionResult> DecreaseQuantity(Guid? temporalSaleId)
+        [Authorize]
+        public IActionResult OrderSuccess()
         {
-            if (temporalSaleId == null) return NotFound();
+            return View();
+        }
 
-            TemporaryLoan temporaryLoan = await _context.TemporaryLoans.FindAsync(temporalSaleId);
+        #region
+        public async Task<IActionResult> DecreaseQuantity(Guid? temporaryLoanId)
+        {
+            if (temporaryLoanId == null) return NotFound();
+
+            TemporaryLoan temporaryLoan = await _context.TemporaryLoans.FindAsync(temporaryLoanId);
             if (temporaryLoan == null) return NotFound();
 
             if (temporaryLoan.Quantity > 1)
@@ -228,11 +234,11 @@ namespace Library.Controllers
             return RedirectToAction(nameof(ShowCartAndConfirm));
         }
 
-        public async Task<IActionResult> IncreaseQuantity(Guid? temporalSaleId)
+        public async Task<IActionResult> IncreaseQuantity(Guid? temporaryLoanId)
         {
-            if (temporalSaleId == null) return NotFound();
+            if (temporaryLoanId == null) return NotFound();
 
-            TemporaryLoan temporaryLoan = await _context.TemporaryLoans.FindAsync(temporalSaleId);
+            TemporaryLoan temporaryLoan = await _context.TemporaryLoans.FindAsync(temporaryLoanId);
             if (temporaryLoan == null) return NotFound();
 
             temporaryLoan.Quantity++;
@@ -243,16 +249,65 @@ namespace Library.Controllers
             return RedirectToAction(nameof(ShowCartAndConfirm));
         }
 
-        public async Task<IActionResult> DeleteTemporalSale(Guid? temporalSaleId)
+        public async Task<IActionResult> DeleteTemporalSale(Guid? temporaryLoanId)
         {
-            if (temporalSaleId == null) return NotFound();
+            if (temporaryLoanId == null) return NotFound();
 
-            TemporaryLoan temporaryLoan = await _context.TemporaryLoans.FindAsync(temporalSaleId);
+            TemporaryLoan temporaryLoan = await _context.TemporaryLoans.FindAsync(temporaryLoanId);
             if (temporaryLoan == null) return NotFound();
 
             _context.TemporaryLoans.Remove(temporaryLoan);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(ShowCartAndConfirm));
+        }
+        #endregion
+
+        #region Edit temporary loan actions
+        public async Task<IActionResult> EditTemporaryLoan(Guid? temporaryLoanId)
+        {
+            if (temporaryLoanId == null) return NotFound();
+
+            TemporaryLoan temporaryLoan = await _context.TemporaryLoans.FindAsync(temporaryLoanId);
+            if (temporaryLoan == null) return NotFound();
+
+            EditTemporaryLoanViewModel editTemporaryLoanViewModel = new()
+            {
+                Id = temporaryLoan.Id,
+                Quantity = temporaryLoan.Quantity,
+                Remarks = temporaryLoan.Remarks,
+                ModifiedDate = DateTime.Now,
+            };
+
+            return View(editTemporaryLoanViewModel);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> EditTemporaryLoan(Guid? temporaryLoanId, EditTemporaryLoanViewModel editTemporaryLoanViewModel)
+        {
+            if (temporaryLoanId != editTemporaryLoanViewModel.Id) return NotFound();
+
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    TemporaryLoan temporaryLoan = await _context.TemporaryLoans.FindAsync(temporaryLoanId);
+                    temporaryLoan.Quantity = editTemporaryLoanViewModel.Quantity;
+                    temporaryLoan.Remarks = editTemporaryLoanViewModel.Remarks;
+                    temporaryLoan.ModifiedDate = DateTime.Now;
+                    _context.Update(temporaryLoan);
+                    await _context.SaveChangesAsync();
+                }
+                catch (Exception ex)
+                {
+                    ModelState.AddModelError(string.Empty, ex.Message);
+                    return View(editTemporaryLoanViewModel);
+                }
+
+                return RedirectToAction(nameof(ShowCartAndConfirm));
+            }
+
+            return View(editTemporaryLoanViewModel);
         }
         #endregion
 
