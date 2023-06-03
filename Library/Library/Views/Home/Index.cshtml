@@ -19,14 +19,54 @@
             <div class="row">
                 <div class="col-4">
                     <article>
-                        <img src="~/images/biblioteca.png" width="320">
-                        <a class="nav-link text-dark" asp-area="" asp-controller="Books" asp-action="Index">Libros</a>
+                        <img src="~/images/users/usuarios.jpg" width="250">
+                        <a class="nav-link text-dark" asp-area="" asp-controller="Users" asp-action="Index">Usuarios</a>
                     </article>
                 </div>
+            </div>
+        </section>
+    }
+    else if (User.Identity.IsAuthenticated && User.IsInRole("Librarian"))
+    {
+        <div style="text-align:left;">
+            <a class="btn btn-primary" data-bs-toggle="offcanvas" href="#offcanvasExample" role="button" aria-controls="offcanvasExample">
+                Menú
+            </a>
+        </div>
+        <div class="offcanvas offcanvas-start" tabindex="-1" id="offcanvasExample" aria-labelledby="offcanvasExampleLabel">
+            <div class="offcanvas-header">
+                <h5 class="offcanvas-title" id="offcanvasExampleLabel">Biblioteca</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+            </div>
+            <div class="offcanvas-body">
+                <div>
+                    Bienvenido, en esta biblioteca podrá contar con el mejor servicio de préstamo de libros.
+                </div>
+                <br>
+                <a class="nav-link text-dark" asp-area="" asp-controller="Account" asp-action="EditUser">Perfil</a>
+                <br>
+                <a class="nav-link text-dark" asp-area="" asp-controller="Books" asp-action="Index">Libros</a>
+                <br>
+                <a class="nav-link text-dark" asp-area="" asp-controller="Catalogues" asp-action="Index">Catálogos</a>
+                <br>
+                <a class="nav-link text-dark" asp-area="" asp-controller="Universities" asp-action="Index">Universidades</a>
+                <br>
+                <a class="nav-link text-dark" asp-area="" asp-controller="Bookings" asp-action="Index">Reservas</a>
+                <br>
+                <a class="nav-link text-dark" asp-area="" asp-controller="Users" asp-action="CreateLibrarian">Nuevo Bibliotecario</a>
+                <br>
+                <a class="nav-link text-dark" asp-area="" asp-controller="Account" asp-action="Logout">Cerrar Sesión</a>
+            </div>
+        </div>
+        <div class="text-center">
+            <h1 class="display-4">Bienvenidos @ViewBag.UserFullName a la Biblioteca</h1>
+        </div>
+        <section class="contener">
+            <div class="row">
                 <div class="col-4">
                     <article>
-                        <img src="~/images/usuarios.jpg" width="250">
-                        <a class="nav-link text-dark" asp-area="" asp-controller="Users" asp-action="Index">Usuarios</a>
+                        <img src="~/images/biblioteca.png" width="320">
+                        <a class="nav-link text-dark" asp-area="" asp-controller="Books" asp-action="Index">Libros</a>
                     </article>
                 </div>
                 <div class="col-4">
@@ -37,8 +77,14 @@
                 </div>
                 <div class="col-4">
                     <article>
-                        <img src="~/images/books.png" width="300">
-                        <a class="nav-link text-dark" asp-area="" asp-controller="Universities" asp-action="Index">Universidad</a>
+                        <img src="~/images/universities/university.png" width="200">
+                        <a class="nav-link text-dark" asp-area="" asp-controller="Universities" asp-action="Index">Universidades</a>
+                    </article>
+                </div>
+                <div class="col-4">
+                    <article>
+                        <img src="~/images/reserva.png" width="200">
+                        <a class="nav-link text-dark" asp-area="" asp-controller="Bookings" asp-action="Index">Reservas</a>
                     </article>
                 </div>
             </div>

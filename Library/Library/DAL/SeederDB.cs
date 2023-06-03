@@ -33,6 +33,7 @@ namespace Library.DAL
             await PopulateRolesAsync();
             await PopulateUserAsync("Admin", "Librarian", "admin@yopmail.com", "3002323232", "Street Apple", "102030", "admin_use.png", UserType.Admin);
             await PopulateUserAsync("User", "Studen", "user@yopmail.com", "4005656656", "Street Microsoft", "405060", "user.png", UserType.User);
+            await PopulateUserAsync("Librarian", "Librarian", "Librarian@yopmail.com", "4005656656", "Street Microsoft", "405060", "bibliotecario.png", UserType.Librarian);
 
             await _context.SaveChangesAsync();
         }

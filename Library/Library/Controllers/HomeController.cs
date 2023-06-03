@@ -55,8 +55,6 @@ namespace Library.Controllers
             return View(homeViewModel);
         }
 
-        
-
         public IActionResult Privacy()
         {
             return View();
@@ -338,7 +336,7 @@ namespace Library.Controllers
         {
             return _context.Users
                 .Where(u => u.Email.Equals(User.Identity.Name))
-                .Select(u => u.FullName.ToUpper())
+                .Select(u => u.FullName)
                 .FirstOrDefault();
         }
         #endregion
