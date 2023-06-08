@@ -2,12 +2,15 @@
 using Library.DAL.Entities;
 using Library.Helpers;
 using Library.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.CodeAnalysis;
 using Microsoft.EntityFrameworkCore;
+using System.Data;
 
 namespace Library.Controllers
 {
+    [Authorize(Roles = "Librarian")]
     public class BooksController : Controller
     {
         #region Constants
@@ -112,10 +115,9 @@ namespace Library.Controllers
         // GET: Books/Edit/5
         public async Task<IActionResult> Edit(Guid? bookId)
         {
-            if (bookId == null) return NotFound();
-
             Book book = await _context.Books.FindAsync(bookId);
-            if (book == null) return NotFound();
+
+            if (book == null || bookId == null) return NotFound();
 
             EdtitBookViewModel edtitBookViewModel = new()
             {
@@ -281,14 +283,12 @@ namespace Library.Controllers
         [HttpGet]
         public async Task<IActionResult> AddCatalogue(Guid? bookId)
         {
-            if (bookId == null) return NotFound();
-
             Book book = await _context.Books
                 .Include(b => b.BookCatalogues)
                 .ThenInclude(bc => bc.Catalogue)
                 .FirstOrDefaultAsync(p => p.Id.Equals(bookId));
 
-            if (book == null) return NotFound();
+            if (book == null || bookId == null) return NotFound();
 
             List<Catalogue> catalogues = book.BookCatalogues.Select(bc => new Catalogue
             {
@@ -296,28 +296,28 @@ namespace Library.Controllers
                 Name = bc.Catalogue.Name
             }).ToList();
 
-            AddBookCatalogueViewModel bookCatalogueViewModel = new()
+            AddBookCatalogueViewModel addBookCatalogueViewModel = new()
             {
                 BookId = book.Id,
                 Catalogues = await _dropDownListHelper.GetDDLCataloguesAsync(catalogues)
             };
-            return View(bookCatalogueViewModel);
+            return View(addBookCatalogueViewModel);
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> AddCatalogue(AddBookCatalogueViewModel addBookCatalogueView)
+        public async Task<IActionResult> AddCatalogue(AddBookCatalogueViewModel addBookCatalogueViewModel)
         {
             Book book = await _context.Books
                 .Include(b => b.BookCatalogues)
                 .ThenInclude(bc => bc.Catalogue)
-                .FirstOrDefaultAsync(b => b.Id.Equals(addBookCatalogueView.BookId));
+                .FirstOrDefaultAsync(b => b.Id.Equals(addBookCatalogueViewModel.BookId));
 
             if (ModelState.IsValid)
             {
                 try
                 {
-                    Catalogue catalogue = await _context.Catalogues.FindAsync(addBookCatalogueView.CatalogueId);
+                    Catalogue catalogue = await _context.Catalogues.FindAsync(addBookCatalogueViewModel.CatalogueId);
 
                     if (book == null || catalogue == null) return NotFound();
 
@@ -333,7 +333,7 @@ namespace Library.Controllers
                 }
                 catch (Exception ex)
                 {
-                    addBookCatalogueView.Catalogues = await _dropDownListHelper.GetDDLCataloguesAsync();
+                    addBookCatalogueViewModel.Catalogues = await _dropDownListHelper.GetDDLCataloguesAsync();
                     ModelState.AddModelError(string.Empty, ex.Message);
                 }
             }
@@ -344,8 +344,8 @@ namespace Library.Controllers
                 Name = bc.Catalogue.Name
             }).ToList();
 
-            addBookCatalogueView.Catalogues = await _dropDownListHelper.GetDDLCataloguesAsync(catalogues);
-            return View(addBookCatalogueView);
+            addBookCatalogueViewModel.Catalogues = await _dropDownListHelper.GetDDLCataloguesAsync(catalogues);
+            return View(addBookCatalogueViewModel);
         }
 
         public async Task<IActionResult> DeleteCatalogue(Guid? bookId)

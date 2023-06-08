@@ -3,6 +3,7 @@ using Library.DAL.Entities;
 using Library.Enum;
 using Library.Helpers;
 using Library.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -38,6 +39,7 @@ namespace Library.Controllers
 
         #region Admin actions
         [HttpGet]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> CreateAdmin()
         {
             AddUserViewModel addUserViewModel = new()
@@ -51,6 +53,7 @@ namespace Library.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> CreateAdmin(AddUserViewModel addUserViewModel)
         {
             if (ModelState.IsValid)
@@ -79,6 +82,7 @@ namespace Library.Controllers
 
         #region Librarian action
         [HttpGet]
+        [Authorize(Roles = "Librarian")]
         public async Task<IActionResult> CreateLibrarian()
         {
             AddUserViewModel addUserViewModel = new()
@@ -92,6 +96,7 @@ namespace Library.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Librarian")]
         public async Task<IActionResult> CreateLibrarian(AddUserViewModel addUserViewModel)
         {
             if (ModelState.IsValid)

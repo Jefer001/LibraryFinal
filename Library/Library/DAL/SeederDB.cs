@@ -56,7 +56,7 @@ namespace Library.DAL
             if (!_context.Books.Any())
             {
                 await AddBooktAsync("Un pájaro de aire", "María Emilia López", 27, new List<string>() { "Didáctico" }, new List<string>() { "pajaro.png" });
-                await AddBooktAsync("Cien años de soledad", "Gabriel García Márquez", 30, new List<string>() { "Narrativo" }, new List<string>() { "cien.png", "garcia.png" });
+                await AddBooktAsync("Cien años de soledad", "Gabriel García Márquez", 30, new List<string>() { "Narrativo", "Lírico" }, new List<string>() { "cien.png", "garcia.png" });
             }
         }
 
@@ -73,6 +73,7 @@ namespace Library.DAL
         {
             Book book = new()
             {
+                CreatedDate = DateTime.Now,
                 Name = name,
                 Author = author,
                 Stock = stock,
@@ -82,7 +83,7 @@ namespace Library.DAL
 
             foreach (string? catalogue in catalogues)
             {
-                book.BookCatalogues.Add(new BookCatalogue { Catalogue = await _context.Catalogues.FirstOrDefaultAsync(c => c.Name.Equals(catalogues)) });
+                book.BookCatalogues.Add(new BookCatalogue { Catalogue = await _context.Catalogues.FirstOrDefaultAsync(c => c.Name.Equals(catalogue)) });
             }
 
             foreach (string? image in images)

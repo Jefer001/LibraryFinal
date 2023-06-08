@@ -7,8 +7,6 @@
 <link rel="stylesheet" href="https://cdn.datatables.net/1.13.3/css/jquery.dataTables.min.css" />
 
 <div class="row">
-    <input type="hidden" asp-for="Remarks" />
-
     <div class="col-md-4">
         <dl class="row">
             <dt class="col-sm-4">
@@ -90,7 +88,14 @@
                                     @Html.DisplayFor(modelItem => item.Quantity)
                                 </td>
                                 <td class="d-flex flex-column">
-                                    <a asp-action="IncreaseQuantity" asp-route-temporaryLoanId="@item.Id" class="btn btn-primary mb-2">+</a>
+                                    @if (item.Quantity != 2)
+                                    {
+                                        <a asp-action="IncreaseQuantity" asp-route-temporaryLoanId="@item.Id" class="btn btn-primary mb-2">+</a>
+                                    }
+                                    else
+                                    {
+                                        <button asp-action="IncreaseQuantity" asp-route-temporaryLoanId="@item.Id" class="btn btn-primary mb-2" disable>+</button>
+                                    }
                                     <br>
                                     <br>
                                     <br>

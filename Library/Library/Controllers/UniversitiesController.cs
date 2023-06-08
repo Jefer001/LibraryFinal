@@ -2,11 +2,14 @@
 using Library.DAL.Entities;
 using Library.Helpers;
 using Library.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System.Data;
 
 namespace Library.Controllers
 {
+    [Authorize(Roles = "Librarian")]
     public class UniversitiesController : Controller
     {
         #region Constants

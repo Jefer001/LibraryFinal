@@ -34,6 +34,7 @@ namespace Library.Controllers
             List<Book>? books = await _context.Books
                 .Include(b => b.BookImages)
                 .Include(b => b.BookCatalogues)
+                .OrderBy(b => b.Name)
                 .ToListAsync();
 
             //Variables de Sesión
@@ -119,7 +120,7 @@ namespace Library.Controllers
                 .Include(b => b.BookImages)
                 .Include(b => b.BookCatalogues)
                 .ThenInclude(bc => bc.Catalogue)
-                .FirstOrDefaultAsync(p => p.Id.Equals(bookId));
+                .FirstOrDefaultAsync(b => b.Id.Equals(bookId));
 
             if (book == null || bookId == null) return NotFound();
 
@@ -132,7 +133,7 @@ namespace Library.Controllers
 
             DetailsBookToCartViewModel detailsBookToCartViewModel = new()
             {
-                Catalogue = catalogues,
+                Catalogues = catalogues,
                 Id = book.Id,
                 Name = book.Name,
                 Author = book.Author,
@@ -265,11 +266,11 @@ namespace Library.Controllers
             temporaryLoan.ModifiedDate = DateTime.Now;
             _context.TemporaryLoans.Update(temporaryLoan);
             await _context.SaveChangesAsync();
-
+            
             return RedirectToAction(nameof(ShowCartAndConfirm));
         }
 
-        public async Task<IActionResult> DeleteTemporalSale(Guid? temporaryLoanId)
+        public async Task<IActionResult> DeleteTemporaryLoan(Guid? temporaryLoanId)
         {
             if (temporaryLoanId == null) return NotFound();
 
@@ -336,7 +337,7 @@ namespace Library.Controllers
         {
             return _context.Users
                 .Where(u => u.Email.Equals(User.Identity.Name))
-                .Select(u => u.FullName)
+                .Select(u => u.FullName.ToUpper())
                 .FirstOrDefault();
         }
         #endregion

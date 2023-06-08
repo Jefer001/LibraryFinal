@@ -21,8 +21,8 @@ namespace Library.Models
         [Required(ErrorMessage = "El campo {0} es obligatorio.")]
         public int Stock { get; set; }
 
-        [Display(Name = "Catálogo")]
-        public string Catalogue { get; set; }
+        [Display(Name = "Catálogos")]
+        public string Catalogues { get; set; }
 
         public ICollection<BookImage> BookImages { get; set; }
 

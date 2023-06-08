@@ -26,7 +26,7 @@ namespace Library.DAL.Entities
         public ICollection<BookCatalogue> BookCatalogues { get; set; }
 
         [Display(Name = "Cálogo")]
-        public int NumberGenera => BookCatalogues == null ? 0 : BookCatalogues.Count;
+        public int NumberCatalogue => BookCatalogues == null ? 0 : BookCatalogues.Count;
 
         public ICollection<BookImage> BookImages { get; set; }
 

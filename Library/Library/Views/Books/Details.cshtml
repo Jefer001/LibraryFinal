@@ -55,7 +55,7 @@
     <div class="col-md-6">
         <div class="panel panel-default">
             <div class="panel-heading">
-                <h3 class="panel-title">Categorías</h3>
+                <h3 class="panel-title">Catálogos</h3>
             </div>
             <div class="panel-body">
                 <table class="table table-hover table-responsive table-striped" id="CataloguesTable">
@@ -68,14 +68,14 @@
                         </tr>
                     </thead>
                     <tbody>
-                        @foreach (var catalogue in Model.BookCatalogues)
+                        @foreach (var item in Model.BookCatalogues)
                         {
                             <tr>
                                 <td>
-                                    @Html.DisplayFor(modelItem => catalogue.Catalogue.Name)
+                                    @Html.DisplayFor(modelItem => item.Catalogue.Name)
                                 </td>
                                 <td>
-                                    <a asp-action="DeleteCatalogue" asp-route-bookId="@catalogue.Id" class="btn btn-outline-danger">Borrar catálogo</a>
+                                    <a asp-action="DeleteCatalogue" asp-route-bookId="@item.Id" class="btn btn-outline-danger">Borrar Catálogo</a>
                                 </td>
                             </tr>
                         }

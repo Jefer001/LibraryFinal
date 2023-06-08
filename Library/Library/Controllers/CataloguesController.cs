@@ -1,10 +1,12 @@
 ﻿using Library.DAL;
 using Library.DAL.Entities;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
 namespace Library.Controllers
 {
+    [Authorize(Roles = "Librarian")]
     public class CataloguesController : Controller
     {
         #region Constants
@@ -25,7 +27,7 @@ namespace Library.Controllers
         {
             return _context.Catalogues != null ?
                         View(await _context.Catalogues.ToListAsync()) :
-                        Problem("Entity set 'DataBaseContext.literaryGenres'  is null.");
+                        Problem("Entity set 'DataBaseContext.Catalogues'  is null.");
         }
 
         // GET: LiteraryGenres/Create
@@ -37,14 +39,14 @@ namespace Library.Controllers
         // POST: LiteraryGenres/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(Catalogue literaryGenre)
+        public async Task<IActionResult> Create(Catalogue catalogue)
         {
             if (ModelState.IsValid)
             {
                 try
                 {
-                    literaryGenre.CreatedDate = DateTime.Now;
-                    _context.Add(literaryGenre);
+                    catalogue.CreatedDate = DateTime.Now;
+                    _context.Add(catalogue);
                     await _context.SaveChangesAsync();
                     return RedirectToAction(nameof(Index));
 
@@ -52,7 +54,7 @@ namespace Library.Controllers
                 catch (DbUpdateException dbUpdateException)
                 {
                     if (dbUpdateException.InnerException.Message.Contains("duplicate"))
-                        ModelState.AddModelError(string.Empty, "Ya existe un género literario con el mismo nombre.");
+                        ModelState.AddModelError(string.Empty, "Ya existe un catálogo con el mismo nombre.");
                     else
                         ModelState.AddModelError(string.Empty, dbUpdateException.InnerException.Message);
                 }
@@ -61,7 +63,7 @@ namespace Library.Controllers
                     ModelState.AddModelError(string.Empty, ex.Message);
                 }
             }
-            return View(literaryGenre);
+            return View(catalogue);
         }
 
         // GET: LiteraryGenres/Edit/5
@@ -69,33 +71,33 @@ namespace Library.Controllers
         {
             if (id == null || _context.Catalogues == null) return NotFound();
 
-            var literary = await _context.Catalogues.FindAsync(id);
+            var catalogue = await _context.Catalogues.FindAsync(id);
 
-            if (literary == null) return NotFound();
+            if (catalogue == null) return NotFound();
 
-            return View(literary);
+            return View(catalogue);
         }
 
         // POST: LiteraryGenres/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(Guid id, Catalogue literaryGenre)
+        public async Task<IActionResult> Edit(Guid id, Catalogue catalogue)
         {
-            if (id != literaryGenre.Id) return NotFound();
+            if (id != catalogue.Id) return NotFound();
 
             if (ModelState.IsValid)
             {
                 try
                 {
-                    literaryGenre.ModifiedDate = DateTime.Now;
-                    _context.Update(literaryGenre);
+                    catalogue.ModifiedDate = DateTime.Now;
+                    _context.Update(catalogue);
                     await _context.SaveChangesAsync();
                     return RedirectToAction(nameof(Index));
                 }
                 catch (DbUpdateException dbUpdateException)
                 {
                     if (dbUpdateException.InnerException.Message.Contains("duplicate"))
-                        ModelState.AddModelError(string.Empty, "Ya existe un género literario con el mismo nombre.");
+                        ModelState.AddModelError(string.Empty, "Ya existe un catálogo con el mismo nombre.");
                     else
                         ModelState.AddModelError(string.Empty, dbUpdateException.InnerException.Message);
                 }
@@ -104,7 +106,7 @@ namespace Library.Controllers
                     ModelState.AddModelError(string.Empty, ex.Message);
                 }
             }
-            return View(literaryGenre);
+            return View(catalogue);
         }
 
         // GET: LiteraryGenres/Details/5
@@ -112,11 +114,11 @@ namespace Library.Controllers
         {
             if (id == null || _context.Catalogues == null) return NotFound();
 
-            var literary = await _context.Catalogues.FirstOrDefaultAsync(c => c.Id.Equals(id));
+            var catalogue = await _context.Catalogues.FirstOrDefaultAsync(c => c.Id.Equals(id));
 
-            if (literary == null) return NotFound();
+            if (catalogue == null) return NotFound();
 
-            return View(literary);
+            return View(catalogue);
         }
 
         // GET: LiteraryGenres/Delete/5
@@ -124,11 +126,11 @@ namespace Library.Controllers
         {
             if (id == null || _context.Catalogues == null) return NotFound();
 
-            var literary = await _context.Catalogues.FirstOrDefaultAsync(c => c.Id.Equals(id));
+            var catalogue = await _context.Catalogues.FirstOrDefaultAsync(c => c.Id.Equals(id));
 
-            if (literary == null) return NotFound();
+            if (catalogue == null) return NotFound();
 
-            return View(literary);
+            return View(catalogue);
         }
 
         // POST: LiteraryGenres/Delete/5
@@ -138,18 +140,13 @@ namespace Library.Controllers
         {
             if (_context.Catalogues == null) return Problem("Entity set 'DataBaseContext.literaryGenres'  is null.");
 
-            var literary = await _context.Catalogues.FindAsync(id);
+            var catalogue = await _context.Catalogues.FindAsync(id);
 
-            if (literary != null) _context.Catalogues.Remove(literary);
+            if (catalogue != null) _context.Catalogues.Remove(catalogue);
 
             await _context.SaveChangesAsync();
 
             return RedirectToAction(nameof(Index));
-        }
-
-        private bool LiteraryGenreExists(Guid id)
-        {
-            return (_context.Catalogues?.Any(l => l.Id.Equals(id))).GetValueOrDefault();
         }
         #endregion
     }
