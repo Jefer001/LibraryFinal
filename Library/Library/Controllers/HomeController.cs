@@ -187,7 +187,7 @@ namespace Library.Controllers
         #endregion
 
         #region 
-        [Authorize] //Etiqueta para que solo usuarios logueados puedan acceder a este método.
+        [Authorize(Roles = "User")] //Etiqueta para que solo usuarios logueados puedan acceder a este método.
         public async Task<IActionResult> ShowCartAndConfirm()
         {
             User user = await _userHelper.GetUserAsync(User.Identity.Name);
@@ -210,6 +210,7 @@ namespace Library.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "User")]
         public async Task<IActionResult> ShowCartAndConfirm(ShowCartViewModel showCartViewModel)
         {
             User user = await _userHelper.GetUserAsync(User.Identity.Name);
@@ -230,7 +231,7 @@ namespace Library.Controllers
         }
         #endregion
 
-        [Authorize]
+        [Authorize(Roles = "User")]
         public IActionResult LoanSuccess()
         {
             return View();

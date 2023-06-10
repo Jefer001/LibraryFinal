@@ -64,7 +64,7 @@ namespace Library.DAL
         {
             if (!_context.Universities.Any())
             {
-                await AddUniversitytAsync("Institución universitaria", "itm.png");
+                await AddUniversitytAsync("Institución universitaria ITM", "itm.png");
                 await AddUniversitytAsync("Universidad de Antioquia", "UdeA.png");
             }
         }

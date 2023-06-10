@@ -1,9 +1,7 @@
 ﻿using Library.DAL;
 using Library.DAL.Entities;
-using Library.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using System.Net;
 
 namespace Library.Controllers
 {
@@ -20,6 +18,7 @@ namespace Library.Controllers
         }
         #endregion
 
+        #region Booking action
         public async Task<IActionResult> Index()
         {
             return _context.LoanDetails != null ?
@@ -54,8 +53,7 @@ namespace Library.Controllers
 
             _context.LoanDetails.Remove(loanDetail);
             await _context.SaveChangesAsync();
-            return View();
-            //return RedirectToAction(nameof(Index));
+            return RedirectToAction(nameof(Index));
         }
 
         public async Task<IActionResult> Confirm(Guid? id)
@@ -88,8 +86,9 @@ namespace Library.Controllers
 
             _context.LoanDetails.Remove(loanDetail);
             await _context.SaveChangesAsync();
-            
+
             return View();
         }
+        #endregion
     }
 }
